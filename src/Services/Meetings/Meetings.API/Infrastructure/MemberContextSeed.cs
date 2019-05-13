@@ -35,55 +35,63 @@ namespace Meetings.Infrastructure
             {
                 new Role()
                 {
-                    Name = "Toastmaster"
+                    Name = "Animateur de la rencontre"
                 },
                 new Role()
                 {
-                    Name = "Humorist"
+                    Name = "Évaluateur général"
                 },
                 new Role()
                 {
-                    Name = "Linguist"
+                    Name = "Mot du jour"
                 },
                 new Role()
                 {
-                    Name = "Topicsmaster"
+                    Name = "Toast"
                 },
                 new Role()
                 {
-                    Name = "Table Topics Speaker"
+                    Name = "Farce / Anecdote"
                 },
                 new Role()
                 {
-                    Name = "Meeting Speaker"
+                    Name = "Meneur de sujets improvisés"
+                },
+                new Role()
+                {
+                    Name = "Improvisateur"
+                },
+                new Role()
+                {
+                    Name = "Discours"
+                },
+                new Role()
+                {
+                    Name = "Évaluateur du discours"
+                },
+                new Role()
+                {
+                    Name = "Grammairien / Compteur d’hésitations"
                 },      
                 new Role()
-                {
-                    Name = "General Evaluator"
-                },
-                new Role()
-                {
-                    Name = "Evaluator"
-                },
-                   new Role()
                 {
                     Name = "Grammarian"
                 },
                 new Role()
                 {
-                    Name = "Ah - Counter"
+                    Name = "Écouteur"
                 },
                 new Role()
                 {
-                    Name = "Timer"
+                    Name = "Chronométreur"
                 },
                 new Role()
                 {
-                    Name = "Visitor"
+                    Name = "Membre"
                 },
                 new Role()
                 {
-                    Name = "Member"
+                    Name = "Visiteur"
                 },
             };
         }

@@ -26,7 +26,7 @@ namespace Members.API
             var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Members;Integrated Security=True";
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
-
+                     
             services
                 .AddCustomOptions(Configuration)
                 .AddSwagger();
