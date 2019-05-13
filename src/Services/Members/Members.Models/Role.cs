@@ -1,6 +1,6 @@
-﻿namespace Members.DataAccess.Models
+﻿namespace Members.Models
 {
-    public class Member
+    public class Role
     {
         public int Id { get; set; }
 

@@ -1,6 +1,5 @@
-﻿using Members.DataAccess.Models;
-using Members.DataAccess.Persistence;
-using Microsoft.AspNetCore.Authorization;
+﻿using Members.DataAccess;
+using Members.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;

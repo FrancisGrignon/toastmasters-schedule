@@ -1,7 +1,8 @@
-﻿using Members.DataAccess.Models;
+﻿using Members.DataAccess.Persistence.EntityConfiguration;
+using Members.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Members.DataAccess.Persistence
+namespace Members.DataAccess
 {
     public class MemberContext : DbContext
     {
@@ -12,6 +13,8 @@ namespace Members.DataAccess.Persistence
 
         public DbSet<Member> Members { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //if (!optionsBuilder.IsConfigured)
@@ -21,5 +24,11 @@ namespace Members.DataAccess.Persistence
                 optionsBuilder.UseSqlServer(connection);
             }
         }
-    }   
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new MemberEntityTypeConfiguration());
+            builder.ApplyConfiguration(new RoleEntityTypeConfiguration());
+        }
+    }
 }

@@ -12,12 +12,11 @@
 
   <ItemGroup>
     <Folder Include="Core\Repositories\" />
-    <Folder Include="Persistence\EntityConfiguration\" />
     <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Members.DataAccess.Models\Members.DataAccess.Models.csproj" />
+    <ProjectReference Include="..\Members.Models\Members.Models.csproj" />
   </ItemGroup>
 
 </Project>
