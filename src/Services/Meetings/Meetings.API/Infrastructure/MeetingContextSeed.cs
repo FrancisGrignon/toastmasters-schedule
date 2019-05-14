@@ -37,7 +37,12 @@ namespace Meetings.Infrastructure
             }
             else
             {
-                context.Update(role);
+                entity.Active = role.Active;
+                entity.Name = role.Name;
+                entity.Note = role.Note;
+                entity.Order = role.Order;
+
+                context.Update(entity);
             }
         }
 
@@ -45,21 +50,21 @@ namespace Meetings.Infrastructure
         {
             return new List<Role>()
             {
-                new Role() { Order = 1000, Name = "Animateur de la rencontre" },
-                new Role() { Order = 1010, Name = "Évaluateur général" },
-                new Role() { Order = 1020, Name = "Mot du jour" },
-                new Role() { Order = 1030, Name = "Toast" },
-                new Role() { Order = 1040, Name = "Farce / Anecdote" },
-                new Role() { Order = 1050, Name = "Meneur de sujets improvisés" },
-                new Role() { Order = 1060, Name = "Improvisateur" },
-                new Role() { Order = 1070, Name = "Discours" },
-                new Role() { Order = 1080, Name = "Évaluateur du discours" },
-                new Role() { Order = 1090, Name = "Grammairien / Compteur d’hésitations" },      
-                new Role() { Order = 1100, Name = "Grammarian" },
-                new Role() { Order = 1110, Name = "Écouteur" },
-                new Role() { Order = 1120, Name = "Chronométreur" },
-                new Role() { Order = 1130, Name = "Membre" },
-                new Role() { Order = 1140, Name = "Visiteur" }
+                new Role() { Id = 1, Order = 1000, Name = "Animateur de la rencontre" },
+                new Role() { Id = 2, Order = 1010, Name = "Évaluateur général" },
+                new Role() { Id = 3, Order = 1020, Name = "Mot du jour" },
+                new Role() { Id = 4, Order = 1030, Name = "Toast" },
+                new Role() { Id = 5, Order = 1040, Name = "Farce / Anecdote" },
+                new Role() { Id = 6, Order = 1050, Name = "Meneur de sujets improvisés" },
+                new Role() { Id = 7, Order = 1060, Name = "Improvisateur" },
+                new Role() { Id = 8, Order = 1070, Name = "Discours" },
+                new Role() { Id = 9, Order = 1080, Name = "Évaluateur du discours" },
+                new Role() { Id = 10, Order = 1090, Name = "Grammairien / Compteur d’hésitations" },      
+                new Role() { Id = 11, Order = 1100, Name = "Grammarian" },
+                new Role() { Id = 12, Order = 1110, Name = "Écouteur" },
+                new Role() { Id = 13, Order = 1120, Name = "Chronométreur" },
+                new Role() { Id = 14, Order = 1130, Name = "Membre" },
+                new Role() { Id = 15, Order = 1140, Name = "Visiteur" }
             };
         }
 

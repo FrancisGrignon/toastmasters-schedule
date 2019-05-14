@@ -1,4 +1,6 @@
-﻿namespace Meetings.Models
+﻿using System.Collections.Generic;
+
+namespace Meetings.Models
 {
     public class Role
     {
@@ -11,5 +13,7 @@
         public int Order { get; set; }
 
         public bool Active { get; set; }
+
+        public ICollection<Attendee> Attendees { get; set; }
     }
 }

@@ -6,36 +6,36 @@ using System;
 
 namespace Meetings.Infrastructure.Persistence.EntityConfiguration
 {
-    class MeetingEntityTypeConfiguration
-       : IEntityTypeConfiguration<Meeting>
+    class AttendeeEntityTypeConfiguration
+       : IEntityTypeConfiguration<Attendee>
     {
-        public void Configure(EntityTypeBuilder<Meeting> builder)
+        public void Configure(EntityTypeBuilder<Attendee> builder)
         {
-            builder.ToTable("Meetings");
+            builder.ToTable("Attendees");
 
             builder.Property<int>(ci => ci.Id)
                 .IsRequired()
                 .ValueGeneratedOnAdd()
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            builder.Property<string>(ci => ci.Name)
-                .IsRequired()
-                .HasMaxLength(255);
+            builder.Property<int>(ci => ci.MeetingId)
+                .IsRequired();
 
-            builder.Property<string>(ci => ci.Note);
+            builder.Property<int?>(ci => ci.MemberId)
+                .IsRequired(false);
+
+            builder.Property<int>(ci => ci.Order)
+                .IsRequired()
+                .HasDefaultValue(100);
+
+            builder.Property<int>(ci => ci.RoleId)
+                .IsRequired();
 
             builder.Property<bool>(ci => ci.Active)
                 .IsRequired()
                 .HasDefaultValue(true);
 
-            builder.Property<DateTime>(ci => ci.Date)
-                .IsRequired();
-
             builder.HasKey(ci => ci.Id);
-
-            builder.HasMany(ci => ci.Attendees)
-                .WithOne(ci => ci.Meeting)
-                .HasForeignKey(ci => ci.MeetingId);
         }
     }
 }

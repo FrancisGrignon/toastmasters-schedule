@@ -29,10 +29,10 @@ namespace Meetings.API.Controllers
         }
 
         // GET: api/Roles/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> GetRole(int id)
+        [HttpGet("{roleId}")]
+        public async Task<ActionResult<Role>> GetRole(int roleId)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.FindAsync(roleId);
 
             if (role == null)
             {
@@ -43,10 +43,10 @@ namespace Meetings.API.Controllers
         }
 
         // PUT: api/Roles/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(int id, Role role)
+        [HttpPut("{roleId}")]
+        public async Task<IActionResult> PutRole(int roleId, Role role)
         {
-            if (id != role.Id)
+            if (roleId != role.Id)
             {
                 return BadRequest();
             }
@@ -59,7 +59,7 @@ namespace Meetings.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoleExists(id))
+                if (!RoleExists(roleId))
                 {
                     return NotFound();
                 }
@@ -83,10 +83,10 @@ namespace Meetings.API.Controllers
         }
 
         // DELETE: api/Roles/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Role>> DeleteRole(int id)
+        [HttpDelete("{roleId}")]
+        public async Task<ActionResult<Role>> DeleteRole(int roleId)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.FindAsync(roleId);
             if (role == null)
             {
                 return NotFound();
@@ -98,9 +98,9 @@ namespace Meetings.API.Controllers
             return role;
         }
 
-        private bool RoleExists(int id)
+        private bool RoleExists(int roleId)
         {
-            return _context.Roles.Any(e => e.Id == id);
+            return _context.Roles.Any(e => e.Id == roleId);
         }
     }
 }

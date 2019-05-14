@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Meetings.Models
 {
@@ -13,5 +14,7 @@ namespace Meetings.Models
         public DateTime Date { get; set; }
 
         public bool Active { get; set; }
+
+        public ICollection<Attendee> Attendees { get; set; }
     }
 }

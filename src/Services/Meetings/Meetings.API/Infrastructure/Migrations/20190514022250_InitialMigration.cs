@@ -11,8 +11,7 @@ namespace Meetings.API.Infrastructure.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 255, nullable: false),
                     Note = table.Column<string>(nullable: true),
                     Order = table.Column<int>(nullable: false, defaultValue: 100),

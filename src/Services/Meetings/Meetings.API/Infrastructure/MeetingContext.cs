@@ -16,7 +16,9 @@ namespace Meetings.Infrastructure
             // Empty
         }
 
-        public DbSet<Role> Meetings { get; set; }
+        public DbSet<Attendee> Attendees { get; set; }
+
+        public DbSet<Meeting> Meetings { get; set; }
 
         public DbSet<Role> Roles { get; set; }
 
@@ -34,6 +36,7 @@ namespace Meetings.Infrastructure
         {
             builder.ApplyConfiguration(new RoleEntityTypeConfiguration());
             builder.ApplyConfiguration(new MeetingEntityTypeConfiguration());
+            builder.ApplyConfiguration(new AttendeeEntityTypeConfiguration());
         }
     }
 }
