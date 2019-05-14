@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Meetings.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,13 +30,12 @@ namespace Meetings.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Meetings;Integrated Security=True";
-
-            services.AddDbContext<MeetingContext>(options => options.UseSqlServer(connection));
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services
+                .AddCustomDbContext(Configuration)
                 .AddCustomOptions(Configuration)
                 .AddSwagger();
         }
@@ -52,26 +53,43 @@ namespace Meetings.API
                 app.UseHsts();
             }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Toastmasters - Meetings HTTP API");
                 c.RoutePrefix = string.Empty;
             });
-
 
             app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
 
-
     public static class CustomExtensionMethods
     {
+        public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<MeetingContext>(options =>
+            {
+                var config = configuration["ConnectionString"];
+
+                options.UseSqlServer(configuration["ConnectionString"],
+                                     sqlServerOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+
+                // Changing default behavior when client evaluation occurs to throw. 
+                // Default in EF Core would be to log a warning when client evaluation is performed.
+                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                // Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<MeetingSettings>(configuration);
@@ -96,7 +114,6 @@ namespace Meetings.API
             return services;
         }
 
-
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -112,7 +129,6 @@ namespace Meetings.API
             });
 
             return services;
-
         }
     }
 }

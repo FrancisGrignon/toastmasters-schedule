@@ -2,24 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Meetings.Infrastructure.Persistence.EntityConfiguration
 {
-    class RoleEntityTypeConfiguration
-       : IEntityTypeConfiguration<Role>
+    class MeetingEntityTypeConfiguration
+       : IEntityTypeConfiguration<Meeting>
     {
-        public void Configure(EntityTypeBuilder<Role> builder)
+        public void Configure(EntityTypeBuilder<Meeting> builder)
         {
-            builder.ToTable("Roles");
+            builder.ToTable("Meetings");
 
             builder.Property<int>(ci => ci.Id)
                 .IsRequired()
                 .ValueGeneratedOnAdd()
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            builder.Property<bool>(ci => ci.Active)
-                .IsRequired()
-                .HasDefaultValue(true);
 
             builder.Property<string>(ci => ci.Name)
                 .IsRequired()
@@ -27,9 +24,12 @@ namespace Meetings.Infrastructure.Persistence.EntityConfiguration
 
             builder.Property<string>(ci => ci.Note);
 
-            builder.Property<int>(ci => ci.Order)
-                 .IsRequired()
-                 .HasDefaultValue(100);
+            builder.Property<bool>(ci => ci.Active)
+                .IsRequired()
+                .HasDefaultValue(true);
+
+            builder.Property<DateTime>(ci => ci.Date)
+                .IsRequired();
 
             builder.HasKey(ci => ci.Id);
         }

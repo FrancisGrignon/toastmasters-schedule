@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System;
-using System.IO;
 
 namespace Meetings.API
 {
@@ -33,8 +32,10 @@ namespace Meetings.API
                 var settings = services.GetService<IOptions<MeetingSettings>>();
                 var logger = services.GetService<ILogger<MeetingContextSeed>>();
 
-                new MeetingContextSeed().Seed(context);
+                new MeetingContextSeed().Seed(context, env, settings, logger);
             });
+
+            host.Run();
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args) =>
@@ -44,8 +45,8 @@ namespace Meetings.API
 
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
-            var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-            var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            //var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+           // var logstashUrl = configuration["Serilog:LogstashgUrl"];
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", AppName)
@@ -61,11 +62,11 @@ namespace Meetings.API
         private static IConfiguration GetConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            var config = builder.Build();
+            // .SetBasePath(Directory.GetCurrentDirectory())               
 
             return builder.Build();
         }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Meetings.API.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,10 +13,10 @@ namespace Meetings.API.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
                     Note = table.Column<string>(nullable: true),
-                    Order = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false)
+                    Order = table.Column<int>(nullable: false, defaultValue: 100),
+                    Active = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
