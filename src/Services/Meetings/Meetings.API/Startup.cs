@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Meetings.API.Infrastructure.Core.Repositories;
+using Meetings.API.Infrastructure.Persistence.Repositories;
 using Meetings.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +39,7 @@ namespace Meetings.API
             services
                 .AddCustomDbContext(Configuration)
                 .AddCustomOptions(Configuration)
+                .AddRepositories()
                 .AddSwagger();
         }
 
@@ -127,6 +130,15 @@ namespace Meetings.API
                     TermsOfService = "Terms Of Service"
                 });
             });
+
+            return services;
+        }
+
+
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IAttendeeRepository, AttendeeRepository>();
+            services.AddTransient<IMeetingRepository, MeetingRepository>();
 
             return services;
         }

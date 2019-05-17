@@ -1,59 +1,75 @@
-﻿using Meetings.Infrastructure;
+﻿using Meetings.API.Helpers;
+using Meetings.API.Infrastructure.Core.Repositories;
+using Meetings.API.ViewModels;
+using Meetings.Infrastructure;
 using Meetings.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Meetings.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/meetings")]
     [ApiController]
     public class MeetingsController : ControllerBase
     {
-        private readonly MeetingContext _context;
+        private readonly IAttendeeRepository _attendeeRepository;
+        private readonly IMeetingRepository _meetingRepository;
 
-        public MeetingsController(MeetingContext context)
+        public MeetingsController(IMeetingRepository meetingRepository, IAttendeeRepository attendeeRepository)
         {
-            _context = context;
+            _meetingRepository = meetingRepository;
+            _attendeeRepository = attendeeRepository;
         }
 
         // GET: api/Meetings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meeting>>> GetMeeting()
+        public async Task<ActionResult<IEnumerable<MeetingViewModel>>> GetMeeting()
         {
-            return await _context.Meetings.ToListAsync();
+            var entites = await _meetingRepository.GetAllAsync();
+
+            return Ok(ViewModelHelper.Convert(entites));
         }
 
         // GET: api/Meetings/5
         [HttpGet("{meetingId}")]
-        public async Task<ActionResult<Meeting>> GetMeeting(int meetingId)
+        public async Task<ActionResult<MeetingViewModel>> GetMeeting(int meetingId)
         {
-            var meeting = await _context.Meetings.FindAsync(meetingId);
+            var meeting = await _meetingRepository.GetWithAttenteesAndRolesAsync(meetingId);
 
             if (meeting == null)
             {
                 return NotFound();
             }
 
-            return meeting;
+            var attendees = await _attendeeRepository.GetAllWithRolesByMeetingAsync(meeting.Id);
+
+            var model = ViewModelHelper.Convert(meeting, attendees);
+
+            return ViewModelHelper.Convert(meeting);
         }
 
         // PUT: api/Meetings/5
         [HttpPut("{meetingId}")]
-        public async Task<IActionResult> PutMeeting(int meetingId, Meeting meeting)
+        public async Task<IActionResult> PutMeeting(int meetingId, MeetingViewModel model)
         {
-            if (meetingId != meeting.Id)
+            var meeting = await _meetingRepository.GetAsync(meetingId);
+
+            if (null == meeting)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(meeting).State = EntityState.Modified;
+            meeting.Name = model.Name;
+            meeting.Note = model.Note;
+            meeting.UpdatedAt = DateTime.UtcNow;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _meetingRepository.CompleteAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,34 +87,48 @@ namespace Meetings.API.Controllers
         }
 
         // POST: api/Meetings
-        [HttpPost]
-        public async Task<ActionResult<Meeting>> PostMeeting(Meeting meeting)
+        [HttpPost()]
+        public async Task<ActionResult<MeetingViewModel>> PostMeeting(MeetingViewModel model)
         {
-            _context.Meetings.Add(meeting);
-            await _context.SaveChangesAsync();
+            var meeting = new Meeting
+            {
+                Date = model.Date,
+                Name = model.Name,
+                Note = model.Note,
+            };
+
+            _meetingRepository.Add(meeting);
+
+            await _meetingRepository.CompleteAsync();
 
             return CreatedAtAction("GetMeeting", new { meetingId = meeting.Id }, meeting);
         }
 
         // DELETE: api/Meetings/5
         [HttpDelete("{meetingId}")]
-        public async Task<ActionResult<Meeting>> DeleteMeeting(int meetingId)
+        public async Task<ActionResult<MeetingViewModel>> DeleteMeeting(int meetingId)
         {
-            var meeting = await _context.Meetings.FindAsync(meetingId);
+            var meeting = await _meetingRepository.GetAsync(meetingId);
+
             if (meeting == null)
             {
                 return NotFound();
             }
 
-            _context.Meetings.Remove(meeting);
-            await _context.SaveChangesAsync();
+            var attendees = await _attendeeRepository.GetAllWithRolesByMeetingAsync(meeting.Id);
 
-            return meeting;
+            _meetingRepository.Remove(meeting);
+
+            await _meetingRepository.CompleteAsync();
+                       
+            var model = ViewModelHelper.Convert(meeting, attendees);
+
+            return model;
         }
 
         private bool MeetingExists(int meetingId)
         {
-            return _context.Meetings.Any(e => e.Id == meetingId);
+            return _meetingRepository.Exists(meetingId);
         }
     }
 }

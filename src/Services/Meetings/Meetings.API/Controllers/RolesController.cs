@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Meetings.Infrastructure;
+using Meetings.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Meetings.Infrastructure;
-using Meetings.Models;
 
 namespace Meetings.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/roles")]
     [ApiController]
     public class RolesController : ControllerBase
     {

@@ -1,69 +1,82 @@
-﻿using Meetings.Infrastructure;
+﻿using Meetings.API.Helpers;
+using Meetings.API.Infrastructure.Core.Repositories;
+using Meetings.API.ViewModels;
 using Meetings.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Meetings.API.Controllers
 {
-    [Route("api/Meetings/{meetingId}/[controller]")]
+    [Route("api/v1/meetings/{meetingId}/attendees")]
     [ApiController]
     public class AttendeesController : ControllerBase
     {
-        private readonly MeetingContext _context;
+        private readonly IAttendeeRepository _repository;
 
-        public AttendeesController(MeetingContext context)
+        public AttendeesController(IAttendeeRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Attendees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Attendee>>> GetAttendees(int meetingId)
+        public async Task<ActionResult<IEnumerable<AttendeeViewModel>>> GetAttendees(int meetingId)
         {
-            return await _context.Attendees.ToListAsync();
+            var entites = await _repository.GetAllWithRolesByMeetingAsync(meetingId);
+
+            return Ok(ViewModelHelper.Convert(entites));
         }
 
         // GET: api/Attendees/5
         [HttpGet("{attendeeId}")]
-        public async Task<ActionResult<Attendee>> GetAttendee(int meetingId, int attendeeId)
+        public async Task<ActionResult<AttendeeViewModel>> GetAttendee(int meetingId, int attendeeId)
         {
-            var attendee = await _context.Attendees.FindAsync(attendeeId);
+            var entity = await _repository.GetWithRolesAsync(attendeeId);
 
-            if (attendee == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            if (meetingId != attendee.MeetingId)
+            if (meetingId != entity.MeetingId)
             {
                 return BadRequest();
             }
 
-            return attendee;
+            return ViewModelHelper.Convert(entity);
         }
 
         // PUT: api/Attendees/5
         [HttpPut("{attendeeId}")]
-        public async Task<IActionResult> PutAttendee(int meetingId, int attendeeId, Attendee attendee)
+        public async Task<IActionResult> PutAttendee(int meetingId, int attendeeId, AttendeeViewModel model)
         {
-            if (attendeeId != attendee.Id)
+            if (attendeeId != model.Id)
             {
                 return BadRequest();
             }
 
-            if (meetingId != attendee.MeetingId)
+            var entity = await _repository.GetAsync(model.Id);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            if (meetingId != entity.MeetingId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(attendee).State = EntityState.Modified;
+            entity.MemberId = model.Member.Id;
+            entity.UpdatedAt = DateTime.UtcNow;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.CompleteAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,45 +95,57 @@ namespace Meetings.API.Controllers
 
         // POST: api/Attendees
         [HttpPost]
-        public async Task<ActionResult<Attendee>> PostAttendee(int meetingId, Attendee attendee)
+        public async Task<ActionResult<Attendee>> PostAttendee(int meetingId, AttendeeViewModel model)
         {
-            if (meetingId != attendee.MeetingId)
+            //if (meetingId != model.MeetingId)
+            // {
+            //    return BadRequest();
+            //}
+
+            var entity = new Attendee
             {
-                return BadRequest();
-            }
+                MeetingId = meetingId,
+                MemberId = model.Member.Id,
+                RoleId = model.Role.Id,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
 
-            _context.Attendees.Add(attendee);
+            _repository.Add(entity);
 
-            await _context.SaveChangesAsync();
+            await _repository.CompleteAsync();
 
-            return CreatedAtAction("GetAttendee", new { id = attendee.Id }, attendee);
+            entity = await _repository.GetWithRolesAsync(entity.Id);
+
+            return CreatedAtAction("GetAttendee", new { id = entity.Id }, ViewModelHelper.Convert(entity));
         }
 
         // DELETE: api/Attendees/5
         [HttpDelete("{attendeeId}")]
-        public async Task<ActionResult<Attendee>> DeleteAttendee(int meetingId, int attendeeId)
+        public async Task<ActionResult<AttendeeViewModel>> DeleteAttendee(int meetingId, int attendeeId)
         {
-            var attendee = await _context.Attendees.FindAsync(attendeeId);
-            if (attendee == null)
+            var entity = await _repository.GetWithRolesAsync(attendeeId);
+
+            if (null == entity)
             {
                 return NotFound();
             }
 
-            if (meetingId != attendee.MeetingId)
+            if (meetingId != entity.MeetingId)
             {
                 return BadRequest();
             }
 
-            _context.Attendees.Remove(attendee);
+            _repository.Remove(entity);
 
-            await _context.SaveChangesAsync();
+            await _repository.CompleteAsync();
 
-            return attendee;
+            return ViewModelHelper.Convert(entity);
         }
 
         private bool AttendeeExists(int attendeeId)
         {
-            return _context.Attendees.Any(e => e.Id == attendeeId);
+            return _repository.Exists(attendeeId);
         }
     }
 }
