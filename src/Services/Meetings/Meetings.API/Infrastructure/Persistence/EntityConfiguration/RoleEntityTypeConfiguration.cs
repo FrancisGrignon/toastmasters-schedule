@@ -33,7 +33,7 @@ namespace Meetings.Infrastructure.Persistence.EntityConfiguration
 
             builder.HasMany(ci => ci.Attendees)
                 .WithOne(ci => ci.Role)
-                .HasForeignKey(ci => ci.MeetingId);
+                .HasForeignKey(ci => ci.RoleId);
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using Meetings.API.Helpers;
 using Meetings.API.Infrastructure.Core.Repositories;
 using Meetings.API.ViewModels;
-using Meetings.Infrastructure;
 using Meetings.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Meetings.API.Controllers
@@ -16,11 +15,13 @@ namespace Meetings.API.Controllers
     [ApiController]
     public class MeetingsController : ControllerBase
     {
+        private readonly ILogger<MeetingsController> _logger;
         private readonly IAttendeeRepository _attendeeRepository;
         private readonly IMeetingRepository _meetingRepository;
 
-        public MeetingsController(IMeetingRepository meetingRepository, IAttendeeRepository attendeeRepository)
+        public MeetingsController(IMeetingRepository meetingRepository, IAttendeeRepository attendeeRepository, ILogger<MeetingsController> logger)
         {
+            _logger = logger;
             _meetingRepository = meetingRepository;
             _attendeeRepository = attendeeRepository;
         }
@@ -49,7 +50,7 @@ namespace Meetings.API.Controllers
 
             var model = ViewModelHelper.Convert(meeting, attendees);
 
-            return ViewModelHelper.Convert(meeting);
+            return model;
         }
 
         // PUT: api/Meetings/5

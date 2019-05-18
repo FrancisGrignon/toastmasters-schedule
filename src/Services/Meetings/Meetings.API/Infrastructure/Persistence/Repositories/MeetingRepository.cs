@@ -55,6 +55,18 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
                     attendees.Add(GenerateAttendee(role));
                     attendees.Add(GenerateAttendee(role));
                 }
+                else if (Role.Visitor == role.Id)
+                {
+                    // Ignore
+                }
+                else if (Role.Member == role.Id)
+                {
+                    // Ignore
+                }
+                else
+                {
+                    // Nothing else to add
+                }
             }
 
             entity.Attendees = attendees;

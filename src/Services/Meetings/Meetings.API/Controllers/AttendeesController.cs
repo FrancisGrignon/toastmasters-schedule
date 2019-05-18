@@ -4,9 +4,9 @@ using Meetings.API.ViewModels;
 using Meetings.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Meetings.API.Controllers
@@ -15,10 +15,12 @@ namespace Meetings.API.Controllers
     [ApiController]
     public class AttendeesController : ControllerBase
     {
+        private readonly ILogger<AttendeesController> _logger;
         private readonly IAttendeeRepository _repository;
 
-        public AttendeesController(IAttendeeRepository repository)
+        public AttendeesController(IAttendeeRepository repository, ILogger<AttendeesController> logger)
         {
+            _logger = logger;
             _repository = repository;
         }
 

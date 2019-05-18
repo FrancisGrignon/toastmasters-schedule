@@ -12,14 +12,14 @@ namespace Meetings.API.Helpers
             return new AttendeeViewModel
             {
                 Id = attendee.Id,
-                Role = new RoleViewModel { Id = attendee.Id, Name = attendee.Role.Name },
+                Role = new RoleViewModel { Id = attendee.RoleId, Name = attendee.Role.Name },
                 Member = attendee.MemberId.HasValue ? new MemberViewModel { Id = attendee.MemberId.Value, Name = attendee.Member } : null
             };
         }
 
         public static IEnumerable<AttendeeViewModel> Convert(IEnumerable<Attendee> attendees)
         {
-            return attendees.Select(p => Convert(p));
+            return attendees.Select(p => Convert(p)).ToArray();
         }
 
         public static MeetingViewModel Convert(Meeting meeting, IEnumerable<Attendee> attendees)
@@ -47,7 +47,7 @@ namespace Meetings.API.Helpers
 
         public static IEnumerable<MeetingViewModel> Convert(IEnumerable<Meeting> meetings)
         {
-            return meetings.Select(p => Convert(p));
+            return meetings.Select(p => Convert(p)).ToArray();
         }
     }
 }

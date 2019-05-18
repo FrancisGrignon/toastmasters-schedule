@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
+using Serilog.Events;
 using System;
 
 namespace Meetings.API
@@ -15,45 +16,72 @@ namespace Meetings.API
     {
         public static readonly string Namespace = typeof(Program).Namespace;
         public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
-
-
-        public static void Main(string[] args)
+        
+        public static int Main(string[] args)
         {
             var configuration = GetConfiguration();
 
             Log.Logger = CreateSerilogLogger(configuration);
 
-            Log.Information("Configuring web host ({ApplicationContext})...", AppName);
-            var host = CreateWebHostBuilder(args);
-
-            host.MigrateDbContext<MeetingContext>((context, services) =>
+            try
             {
-                var env = services.GetService<IHostingEnvironment>();
-                var settings = services.GetService<IOptions<MeetingSettings>>();
-                var logger = services.GetService<ILogger<MeetingContextSeed>>();
+                Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 
-                new MeetingContextSeed().Seed(context, env, settings, logger);
-            });
+                var host = CreateWebHostBuilder(args);
 
-            host.Run();
+                host.MigrateDbContext<MeetingContext>((context, services) =>
+                {
+                    var env = services.GetService<IHostingEnvironment>();
+                    var settings = services.GetService<IOptions<MeetingSettings>>();
+                    var logger = services.GetService<ILogger<MeetingContextSeed>>();
+
+                    new MeetingContextSeed().Seed(context, env, settings, logger);
+                });
+
+                Log.Information("Starting web host");
+
+                host.Run();
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseSerilog()
                 .Build();
 
         private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
+            var logger = new LoggerConfiguration()
+              .MinimumLevel.Debug()
+              .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+              .Enrich.FromLogContext()
+              .WriteTo.Console()
+              .WriteTo.Debug()
+              .CreateLogger();
+
+            return logger;
+                                 
             //var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-           // var logstashUrl = configuration["Serilog:LogstashgUrl"];
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+            // var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            //  return new LoggerConfiguration()
+            //.MinimumLevel.Debug()
+            //                .Enrich.WithProperty("ApplicationContext", AppName)
+            //.Enrich.FromLogContext()
+            //.WriteTo.ColoredConsole()
+            //                .ReadFrom.Configuration(configuration)
+            //.CreateLogger();
 
             //                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
             //    .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
