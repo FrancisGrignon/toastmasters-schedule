@@ -43,14 +43,13 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
             var roles = Context.Roles.Where(role => role.Active).OrderBy(role => role.Order);
 
             var attendees = new List<Attendee>();
-
+                       
             foreach (var role in roles)
             {
-                attendees.Add(GenerateAttendee(role));
-
-                // Add three more improviser
+                // Add four more improviser
                 if (Role.Improviser == role.Id)
                 {
+                    attendees.Add(GenerateAttendee(role));
                     attendees.Add(GenerateAttendee(role));
                     attendees.Add(GenerateAttendee(role));
                     attendees.Add(GenerateAttendee(role));
@@ -65,11 +64,13 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
                 }
                 else
                 {
-                    // Nothing else to add
+                    attendees.Add(GenerateAttendee(role));
                 }
             }
 
             entity.Attendees = attendees;
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTime.UtcNow;
 
             base.Add(entity);
         }

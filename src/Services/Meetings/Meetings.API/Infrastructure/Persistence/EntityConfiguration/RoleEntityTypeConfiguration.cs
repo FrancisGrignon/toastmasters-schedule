@@ -30,10 +30,6 @@ namespace Meetings.Infrastructure.Persistence.EntityConfiguration
                  .HasDefaultValue(100);
 
             builder.HasKey(ci => ci.Id);
-
-            builder.HasMany(ci => ci.Attendees)
-                .WithOne(ci => ci.Role)
-                .HasForeignKey(ci => ci.RoleId);
         }
     }
 }

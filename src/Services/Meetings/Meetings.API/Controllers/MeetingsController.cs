@@ -1,4 +1,5 @@
-﻿using Meetings.API.Helpers;
+﻿using Meetings.API.Attributes;
+using Meetings.API.Helpers;
 using Meetings.API.Infrastructure.Core.Repositories;
 using Meetings.API.ViewModels;
 using Meetings.Models;
@@ -39,7 +40,7 @@ namespace Meetings.API.Controllers
         [HttpGet("{meetingId}")]
         public async Task<ActionResult<MeetingViewModel>> GetMeeting(int meetingId)
         {
-            var meeting = await _meetingRepository.GetWithAttenteesAndRolesAsync(meetingId);
+            var meeting = await _meetingRepository.GetAsync(meetingId);
 
             if (meeting == null)
             {
@@ -54,19 +55,22 @@ namespace Meetings.API.Controllers
         }
 
         // PUT: api/Meetings/5
+        [ValidateModel]
         [HttpPut("{meetingId}")]
-        public async Task<IActionResult> PutMeeting(int meetingId, MeetingViewModel model)
+        public async Task<IActionResult> PutMeeting(int meetingId, MeetingRequestViewModel model)
         {
-            var meeting = await _meetingRepository.GetAsync(meetingId);
+            var entity = await _meetingRepository.GetAsync(meetingId);
 
-            if (null == meeting)
+            if (null == entity)
             {
                 return NotFound();
             }
 
-            meeting.Name = model.Name;
-            meeting.Note = model.Note;
-            meeting.UpdatedAt = DateTime.UtcNow;
+            entity.Date = model.Date;
+            entity.Name = model.Name;
+            entity.Note = model.Note;
+
+            _meetingRepository.Update(entity);
 
             try
             {
@@ -88,8 +92,9 @@ namespace Meetings.API.Controllers
         }
 
         // POST: api/Meetings
+        [ValidateModel]
         [HttpPost()]
-        public async Task<ActionResult<MeetingViewModel>> PostMeeting(MeetingViewModel model)
+        public async Task<ActionResult<MeetingViewModel>> PostMeeting(MeetingRequestViewModel model)
         {
             var meeting = new Meeting
             {
@@ -102,7 +107,11 @@ namespace Meetings.API.Controllers
 
             await _meetingRepository.CompleteAsync();
 
-            return CreatedAtAction("GetMeeting", new { meetingId = meeting.Id }, meeting);
+            var attendees = await _attendeeRepository.GetAllWithRolesByMeetingAsync(meeting.Id);
+
+            var reponse = ViewModelHelper.Convert(meeting, attendees);
+
+            return CreatedAtAction("GetMeeting", new { meetingId = meeting.Id }, reponse);
         }
 
         // DELETE: api/Meetings/5

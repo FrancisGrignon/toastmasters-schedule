@@ -22,6 +22,21 @@ namespace Meetings.API.Helpers
             return attendees.Select(p => Convert(p)).ToArray();
         }
 
+        public static RoleViewModel Convert(Role role)
+        {
+            return new RoleViewModel
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Note = role.Note
+            };
+        }
+
+        public static IEnumerable<RoleViewModel> Convert(IEnumerable<Role> roles)
+        {
+            return roles.Select(p => Convert(p)).ToArray();
+        }
+
         public static MeetingViewModel Convert(Meeting meeting, IEnumerable<Attendee> attendees)
         {
             return new MeetingViewModel

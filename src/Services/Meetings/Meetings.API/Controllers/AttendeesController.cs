@@ -1,4 +1,5 @@
-﻿using Meetings.API.Helpers;
+﻿using Meetings.API.Attributes;
+using Meetings.API.Helpers;
 using Meetings.API.Infrastructure.Core.Repositories;
 using Meetings.API.ViewModels;
 using Meetings.Models;
@@ -37,6 +38,13 @@ namespace Meetings.API.Controllers
         [HttpGet("{attendeeId}")]
         public async Task<ActionResult<AttendeeViewModel>> GetAttendee(int meetingId, int attendeeId)
         {
+            var exists = _repository.Exists(meetingId);
+
+            if (false == exists)
+            {
+                return BadRequest();
+            }
+
             var entity = await _repository.GetWithRolesAsync(attendeeId);
 
             if (entity == null)
@@ -53,10 +61,18 @@ namespace Meetings.API.Controllers
         }
 
         // PUT: api/Attendees/5
+        [ValidateModel]
         [HttpPut("{attendeeId}")]
-        public async Task<IActionResult> PutAttendee(int meetingId, int attendeeId, AttendeeViewModel model)
+        public async Task<IActionResult> PutAttendee(int meetingId, int attendeeId, AttendeeRequestViewModel model)
         {
             if (attendeeId != model.Id)
+            {
+                return BadRequest();
+            }
+
+            var exists = _repository.Exists(meetingId);
+
+            if (false == exists)
             {
                 return BadRequest();
             }
@@ -74,7 +90,8 @@ namespace Meetings.API.Controllers
             }
 
             entity.MemberId = model.Member.Id;
-            entity.UpdatedAt = DateTime.UtcNow;
+
+            _repository.Update(entity);
 
             try
             {
@@ -96,21 +113,22 @@ namespace Meetings.API.Controllers
         }
 
         // POST: api/Attendees
+        [ValidateModel]
         [HttpPost]
-        public async Task<ActionResult<Attendee>> PostAttendee(int meetingId, AttendeeViewModel model)
+        public async Task<ActionResult<AttendeeViewModel>> PostAttendee(int meetingId, AttendeeRequestViewModel model)
         {
-            //if (meetingId != model.MeetingId)
-            // {
-            //    return BadRequest();
-            //}
+            var exists = _repository.Exists(meetingId);
+
+            if (false == exists)
+            {
+                return BadRequest();
+            }
 
             var entity = new Attendee
             {
                 MeetingId = meetingId,
-                MemberId = model.Member.Id,
-                RoleId = model.Role.Id,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                MemberId = model.Member?.Id,
+                RoleId = model.RoleId,
             };
 
             _repository.Add(entity);
@@ -134,6 +152,13 @@ namespace Meetings.API.Controllers
             }
 
             if (meetingId != entity.MeetingId)
+            {
+                return BadRequest();
+            }
+
+            var exists = _repository.Exists(meetingId);
+
+            if (false == exists)
             {
                 return BadRequest();
             }

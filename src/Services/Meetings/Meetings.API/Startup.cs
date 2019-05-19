@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Reflection;
 
@@ -111,6 +112,20 @@ namespace Meetings.API
             return services;
         }
 
+        private static string SchemaIdStrategy(Type currentClass)
+        {
+            string returnedValue = currentClass.Name;
+
+            Log.Information(returnedValue);
+
+            if (returnedValue.EndsWith("ViewModel"))
+            {
+                returnedValue = returnedValue.Replace("ViewModel", string.Empty);
+            }
+                
+            return returnedValue;
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -123,6 +138,8 @@ namespace Meetings.API
                     Description = "The Members Microservice HTTP API.",
                     TermsOfService = "Terms Of Service"
                 });
+
+                options.CustomSchemaIds(SchemaIdStrategy);
             });
 
             return services;
