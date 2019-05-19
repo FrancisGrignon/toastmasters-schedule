@@ -6,8 +6,8 @@ namespace Meetings.Models
     public class Role : IEntity
     {
         public static readonly int Improviser = 7;
-        public static readonly int Member = 14;
-        public static readonly int Visitor = 15;
+        public static readonly int Member = 13;
+        public static readonly int Visitor = 14;
 
         public int Id { get; set; }
 
