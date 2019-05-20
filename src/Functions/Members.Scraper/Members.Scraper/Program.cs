@@ -132,8 +132,8 @@ namespace Members.Scraper
                         //the name of the form values must be the name of <input /> tags of the login form, in this case the tag is <input type="text" name="username">
                         new KeyValuePair<string, string>("__RequestVerificationToken", token),
                         new KeyValuePair<string, string>("uid", uid),
-                        new KeyValuePair<string, string>("Details.UserName", "toastmasters.org@ncis.ca"),
-                        new KeyValuePair<string, string>("Details.Password", "tCastle38mc!s"),
+                        new KeyValuePair<string, string>("Details.UserName", ""),
+                        new KeyValuePair<string, string>("Details.Password", ""),
                         new KeyValuePair<string, string>("Details.MeetingRoomToken", ""),
                     });
 
