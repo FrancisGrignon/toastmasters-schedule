@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TinyCsvParser;
 
 namespace Members.Scraper
 {
@@ -14,17 +15,12 @@ namespace Members.Scraper
 
         static async Task<int> Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
-            // https://www.toastmasters.org/sitecore/content/Toastmasters/Home/Login?returnUrl=/My-Toastmasters/profile/club-central
-
-            // https://www.toastmasters.org/api/sitecore/ClubRoster/ExportClubRosterToCSVDownload
-
             int result;
 
             try
             {
-                result = await Login();
+                var csv = await Login();
+                result = Parse(csv);
             }
             catch (Exception ex)
             {
@@ -53,7 +49,51 @@ namespace Members.Scraper
             return null;
         }
 
-        public async static Task<int> Login()
+        public static int Parse(string csv)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Parsing members from CSV");
+
+            CsvParserOptions csvParserOptions = new CsvParserOptions(true, ',');
+            CsvReaderOptions csvReaderOptions = new CsvReaderOptions(new[] { Environment.NewLine });
+            CsvMemberMapping csvMapper = new CsvMemberMapping();
+            CsvParser<Member> csvParser = new CsvParser<Member>(csvParserOptions, csvMapper);
+
+            var results = csvParser
+                .ReadFromString(csvReaderOptions, csv)
+                .ToList();
+
+            //var results = csvParser
+           //     .ReadFromFile(@"C:\Users\livec\Downloads\Club-Roster20190520.csv", Encoding.UTF8)
+           //     .ToList();
+
+            Member member;
+
+            foreach (var result in results)
+            {
+                if (result.IsValid)
+                {
+                    member = result.Result;
+                    var tab = member.Name.Split(',');
+                    member.Name = tab[0].Trim();
+
+                    if (2 == tab.Length)
+                    {
+                        member.Title = tab[1].Trim();
+                    }
+
+                    Console.WriteLine($"{member.ToastmastersId} | {member.Name} | {member.Title} | {member.Email}");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid");
+                }
+            }
+
+            return 0;
+        }
+
+        public async static Task<string> Login()
         {
             var cookieContainer = new CookieContainer();
 
@@ -72,13 +112,7 @@ namespace Members.Scraper
                         result.EnsureSuccessStatusCode();
 
                         body = await result.Content.ReadAsStringAsync();
-
-                       // Console.WriteLine(body.Substring(0, 100));
-
-                        DisplayCookies(cookieContainer);
                     }
-
-                    System.Threading.Thread.Sleep(3000);
 
                     Console.WriteLine();
                     Console.WriteLine("Logging on toastmasters.org");
@@ -121,28 +155,17 @@ namespace Members.Scraper
                         if (body.Contains("The service is unavailable."))
                         {
                             Console.WriteLine("The service is unavailable.");
+
+                            return null;
                         }
-
-                       // Console.WriteLine(body.Substring(0, 100));
-
-                        DisplayCookies(cookieContainer);
                     }                        
-
-                    //make the subsequent web requests using the same HttpClient object
-                    
 
                     Console.WriteLine();
                     Console.WriteLine("Accessing Club Central");
 
                     using (var result = await client.GetAsync("/My-Toastmasters/profile/club-central"))
                     {                       
-                        result.EnsureSuccessStatusCode();
-
-                        //body = await result.Content.ReadAsStringAsync();
-
-                       // Console.WriteLine(body.Substring(0, 100));
-
-                        DisplayCookies(cookieContainer);                        
+                        result.EnsureSuccessStatusCode();                      
                     }
 
                     Console.WriteLine();
@@ -155,10 +178,6 @@ namespace Members.Scraper
                         result.EnsureSuccessStatusCode();
 
                         csv = await result.Content.ReadAsStringAsync();
-
-                        //Console.WriteLine(body.Substring(0, 100));
-
-                        DisplayCookies(cookieContainer);
                     }
 
                     Console.WriteLine();
@@ -167,26 +186,11 @@ namespace Members.Scraper
                     using (var result = await client.GetAsync("/logout"))
                     {
                         result.EnsureSuccessStatusCode();
-
-                       // body = await result.Content.ReadAsStringAsync();
-
-                        //Console.WriteLine(body.Substring(0, 100));
-
-                        DisplayCookies(cookieContainer);
                     }
 
-                    Console.WriteLine();
-                    Console.WriteLine("Parsing members CSV");
-
-                    Console.WriteLine();
-                    Console.WriteLine("Sharing members");
-
+                    return csv;
                 }
             }
-
-            Console.ReadKey();
-
-            return 0;
         }
          
         private static void DisplayCookies(CookieContainer cookieContainer)
@@ -198,31 +202,5 @@ namespace Members.Scraper
                 Console.WriteLine($"    {cookie.Name} = {cookie.Value}");
             }
         }
-
-        //public static string ParseVerificationToken(string content)
-        //{
-        //    // <input name = "__RequestVerificationToken" type = "hidden" value = "pXnJwcEEaq2QfqDjJ2LjdJGpdxhD_CfYaa63_BMIbkcQ9OO-U6ZuTS-cO1GlnXj47MB9WA0DMxqCIDBNpfGFbN_5gyzVL9aKirset_a_vSM1" />
-        //    // <input name = "uid" type = "hidden" value = "6376a31d-bf16-4b55-adf7-da7f2a4802f3" />
-
-        //    // Below through the regular expression found hidden domain name = '__ RequestVerificationToken'
-        //    string patternRegion = "<\\s*input\\s*.*name\\s*=\\s*\"__RequestVerificationToken\"\\s*.*value\\s*=\\s*\"(?<value>[\\w-]{108,108})\"\\s*/>";
-        //    RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-        //    Regex reg = new Regex(patternRegion, regexOptions);
-        //    MatchCollection mc = reg.Matches(content);
-        //    foreach (Match m in mc)
-        //    {
-        //        var hidRequestVerificationToken = m.Groups["value"].Value;
-        //        //showlables.Content = hidRequestVerificationToken;
-
-        //        return hidRequestVerificationToken;
-        //    }
-
-        //    return null
-        //}
-
-        //public static string ParseUid(string content)
-        //{
-
-        //}
     }
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.4" />
+    <PackageReference Include="TinyCsvParser" Version="2.3.0" />
   </ItemGroup>
 
 </Project>
