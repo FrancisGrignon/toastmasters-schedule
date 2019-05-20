@@ -1,0 +1,48 @@
+﻿@model Planning
+
+@{
+    ViewData["Title"] = "Rencontre";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                <td>
+                    @Model[x, 0]
+                </td>
+                }
+            </tr>
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                <td>
+                    @Model[x, 1]
+                </td>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int y = 2; y < Model.MaxY; y++)
+            {
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                <td>
+                    @Model[x, y]
+                </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@*<div>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        <a asp-action="Index">Back to List</a>
+    </div>*@

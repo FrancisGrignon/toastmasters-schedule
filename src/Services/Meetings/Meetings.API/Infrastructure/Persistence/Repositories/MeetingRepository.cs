@@ -16,7 +16,7 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
             // Empty
         }
 
-        public Task<Meeting[]> GetFutureWithAttenteesAndRolesAsync(int numberOfMeetings)
+        public Task<Meeting[]> GetPlanningWithAttenteesAndRolesAsync(int numberOfMeetings)
         {
             var startAt = DateTime.UtcNow;
 
@@ -46,13 +46,9 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
                        
             foreach (var role in roles)
             {
-                // Add four more improviser
                 if (Role.Improviser == role.Id)
                 {
-                    attendees.Add(GenerateAttendee(role));
-                    attendees.Add(GenerateAttendee(role));
-                    attendees.Add(GenerateAttendee(role));
-                    attendees.Add(GenerateAttendee(role));
+                    // Ignore
                 }
                 else if (Role.Visitor == role.Id)
                 {
@@ -69,8 +65,6 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
             }
 
             entity.Attendees = attendees;
-            entity.CreatedAt = DateTime.UtcNow;
-            entity.UpdatedAt = DateTime.UtcNow;
 
             base.Add(entity);
         }

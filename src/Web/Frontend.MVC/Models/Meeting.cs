@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.MVC.Models
 {
@@ -7,10 +8,15 @@ namespace Frontend.MVC.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(255)]
         public string Name { get; set; }
 
+        [Required]
+        [MaxLength(2048)]
         public string Note { get; set; }
 
+        [Required]
         public DateTime Date { get; set; }
 
         public ICollection<Attendee> Attendees { get; set; }

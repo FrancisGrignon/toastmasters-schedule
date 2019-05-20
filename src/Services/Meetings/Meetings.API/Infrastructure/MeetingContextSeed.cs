@@ -61,9 +61,7 @@ namespace Meetings.Infrastructure
                 new Role() { Id = 9, Active = true, Order = 1080, Name = "Évaluateur du discours", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
                 new Role() { Id = 10, Active = true, Order = 1090, Name = "Grammairien / Compteur d’hésitations", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
                 new Role() { Id = 11, Active = true, Order = 1110, Name = "Écouteur", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Role() { Id = 12, Active = true, Order = 1120, Name = "Chronométreur", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Role() { Id = Role.Member, Active = true, Order = 1130, Name = "Membre", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Role() { Id = Role.Visitor, Active = true, Order = 1140, Name = "Visiteur", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+                new Role() { Id = 12, Active = true, Order = 1120, Name = "Chronométreur", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
             };
         }
 

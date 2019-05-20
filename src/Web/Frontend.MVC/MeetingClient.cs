@@ -23,11 +23,25 @@ namespace Frontend.MVC.C
                 .GetJsonAsync<List<Meeting>>();
         }
 
-        public Task<Meeting> Find(int id)
+        public Task<Meeting> Get(int id)
         {
             return _baseUrl
                 .AppendPathSegment($"v1/meetings/{id}")
                 .GetJsonAsync<Meeting>();
+        }
+
+        public Task<List<Meeting>> GetPlanning()
+        {
+            return _baseUrl
+                .AppendPathSegment($"v1/meetings/planning")
+                .GetJsonAsync<List<Meeting>>();
+        }
+
+        public Task<List<Role>> GetRoles()
+        {
+            return _baseUrl
+                .AppendPathSegment($"v1/roles")
+                .GetJsonAsync<List<Role>>();
         }
     }
 }

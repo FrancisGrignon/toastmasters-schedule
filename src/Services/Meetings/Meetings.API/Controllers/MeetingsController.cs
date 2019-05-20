@@ -36,6 +36,15 @@ namespace Meetings.API.Controllers
             return Ok(ViewModelHelper.Convert(entites));
         }
 
+        // GET: api/v1/meetings/planning
+        [HttpGet("planning")]
+        public async Task<ActionResult<IEnumerable<MeetingViewModel>>> GetMeetingPlanning()
+        {
+            var entites = await _meetingRepository.GetPlanningWithAttenteesAndRolesAsync(6);
+
+            return Ok(ViewModelHelper.Convert(entites));
+        }
+
         // GET: api/Meetings/5
         [HttpGet("{meetingId}")]
         public async Task<ActionResult<MeetingViewModel>> GetMeeting(int meetingId)

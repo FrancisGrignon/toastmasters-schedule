@@ -19,6 +19,11 @@ namespace Meetings.API.Helpers
 
         public static IEnumerable<AttendeeViewModel> Convert(IEnumerable<Attendee> attendees)
         {
+            if (null == attendees)
+            {
+                return null;
+            }
+
             return attendees.Select(p => Convert(p)).ToArray();
         }
 
@@ -56,7 +61,8 @@ namespace Meetings.API.Helpers
                 Id = meeting.Id,
                 Name = meeting.Name,
                 Note = meeting.Note,
-                Date = meeting.Date
+                Date = meeting.Date,
+                Attendees = Convert(meeting.Attendees)
             };
         }
 

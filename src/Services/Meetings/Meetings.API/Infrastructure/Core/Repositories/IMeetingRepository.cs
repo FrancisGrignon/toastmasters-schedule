@@ -5,7 +5,7 @@ namespace Meetings.API.Infrastructure.Core.Repositories
 {
     public interface IMeetingRepository : IRepository<Meeting>
     {
-        Task<Meeting[]> GetFutureWithAttenteesAndRolesAsync(int numberOfMeetings);
+        Task<Meeting[]> GetPlanningWithAttenteesAndRolesAsync(int numberOfMeetings);
 
         Task<Meeting> GetWithAttenteesAndRolesAsync(int meetingId);
     }

@@ -150,6 +150,7 @@ namespace Meetings.API
         {
             services.AddTransient<IAttendeeRepository, AttendeeRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
+            services.AddTransient<IRoleRepository, RoleRepository>();
 
             return services;
         }
