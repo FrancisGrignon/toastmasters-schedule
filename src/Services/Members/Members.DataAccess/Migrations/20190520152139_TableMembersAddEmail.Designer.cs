@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Members.DataAccess.Migrations
 {
     [DbContext(typeof(MemberContext))]
-    [Migration("20190512154931_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190520152139_TableMembersAddEmail")]
+    partial class TableMembersAddEmail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,13 +26,20 @@ namespace Members.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasMaxLength(2048);
 
                     b.HasKey("Id");
 

@@ -6,14 +6,17 @@ namespace Members.DataAccess
 {
     public class MemberContext : DbContext
     {
+        public MemberContext()
+        {
+            // Empty
+        }
+
         public MemberContext(DbContextOptions<MemberContext> options) : base(options)
         {
             // Empty
         }
 
         public DbSet<Member> Members { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,7 +31,6 @@ namespace Members.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new MemberEntityTypeConfiguration());
-            builder.ApplyConfiguration(new RoleEntityTypeConfiguration());
         }
     }
 }

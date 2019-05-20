@@ -24,13 +24,20 @@ namespace Members.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasMaxLength(2048);
 
                     b.HasKey("Id");
 

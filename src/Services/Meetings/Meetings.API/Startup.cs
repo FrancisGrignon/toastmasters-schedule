@@ -133,9 +133,9 @@ namespace Meetings.API
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "Toastmasters - Members HTTP API",
+                    Title = "Toastmasters - Meetings HTTP API",
                     Version = "v1",
-                    Description = "The Members Microservice HTTP API.",
+                    Description = "The Meetings Microservice HTTP API.",
                     TermsOfService = "Terms Of Service"
                 });
 

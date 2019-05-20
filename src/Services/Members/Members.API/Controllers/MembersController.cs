@@ -23,7 +23,7 @@ namespace Members.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
         {
-            return await _context.Members.ToListAsync();
+            return await _context.Members.Where(p => p.Active).ToListAsync();
         }
 
         // GET: api/Members/5

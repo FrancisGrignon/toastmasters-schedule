@@ -10,7 +10,7 @@ namespace Members.DataAccess.Persistence.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Member> builder)
         {
-            builder.ToTable("Member");
+            builder.ToTable("Members");
 
             builder.Property<int>(ci => ci.Id)
                 .IsRequired()
@@ -25,7 +25,12 @@ namespace Members.DataAccess.Persistence.EntityConfiguration
                 .IsRequired()
                 .HasMaxLength(255);
 
-            builder.Property<string>(ci => ci.Note);
+            builder.Property<string>(ci => ci.Note)
+                .HasMaxLength(2048);
+
+            builder.Property<string>(ci => ci.Email)
+                .IsRequired()
+                .HasMaxLength(255);
 
             builder.HasKey(ci => ci.Id);
         }

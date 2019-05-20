@@ -17,19 +17,21 @@ namespace Meetings.API.Controllers
     public class AttendeesController : ControllerBase
     {
         private readonly ILogger<AttendeesController> _logger;
-        private readonly IAttendeeRepository _repository;
+        private readonly IAttendeeRepository _attendeeRepository;
+        private readonly IMeetingRepository _meetingRepository;
 
-        public AttendeesController(IAttendeeRepository repository, ILogger<AttendeesController> logger)
+        public AttendeesController(IMeetingRepository meetingRepository, IAttendeeRepository attendeeRepository, ILogger<AttendeesController> logger)
         {
             _logger = logger;
-            _repository = repository;
+            _meetingRepository = meetingRepository;
+            _attendeeRepository = attendeeRepository;
         }
 
         // GET: api/Attendees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AttendeeViewModel>>> GetAttendees(int meetingId)
         {
-            var entites = await _repository.GetAllWithRolesByMeetingAsync(meetingId);
+            var entites = await _attendeeRepository.GetAllWithRolesByMeetingAsync(meetingId);
 
             return Ok(ViewModelHelper.Convert(entites));
         }
@@ -38,14 +40,14 @@ namespace Meetings.API.Controllers
         [HttpGet("{attendeeId}")]
         public async Task<ActionResult<AttendeeViewModel>> GetAttendee(int meetingId, int attendeeId)
         {
-            var exists = _repository.Exists(meetingId);
+            var exists = _attendeeRepository.Exists(meetingId);
 
             if (false == exists)
             {
                 return BadRequest();
             }
 
-            var entity = await _repository.GetWithRolesAsync(attendeeId);
+            var entity = await _attendeeRepository.GetWithRolesAsync(attendeeId);
 
             if (entity == null)
             {
@@ -70,14 +72,14 @@ namespace Meetings.API.Controllers
                 return BadRequest();
             }
 
-            var exists = _repository.Exists(meetingId);
+            var exists = _meetingRepository.Exists(meetingId);
 
             if (false == exists)
             {
                 return BadRequest();
             }
 
-            var entity = await _repository.GetAsync(model.Id);
+            var entity = await _attendeeRepository.GetAsync(model.Id);
 
             if (entity == null)
             {
@@ -90,12 +92,13 @@ namespace Meetings.API.Controllers
             }
 
             entity.MemberId = model.Member.Id;
+            entity.Member = model.Member.Name;
 
-            _repository.Update(entity);
+            _attendeeRepository.Update(entity);
 
             try
             {
-                await _repository.CompleteAsync();
+                await _attendeeRepository.CompleteAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -117,7 +120,7 @@ namespace Meetings.API.Controllers
         [HttpPost]
         public async Task<ActionResult<AttendeeViewModel>> PostAttendee(int meetingId, AttendeeRequestViewModel model)
         {
-            var exists = _repository.Exists(meetingId);
+            var exists = _meetingRepository.Exists(meetingId);
 
             if (false == exists)
             {
@@ -131,11 +134,11 @@ namespace Meetings.API.Controllers
                 RoleId = model.RoleId,
             };
 
-            _repository.Add(entity);
+            _attendeeRepository.Add(entity);
 
-            await _repository.CompleteAsync();
+            await _attendeeRepository.CompleteAsync();
 
-            entity = await _repository.GetWithRolesAsync(entity.Id);
+            entity = await _attendeeRepository.GetWithRolesAsync(entity.Id);
 
             return CreatedAtAction("GetAttendee", new { id = entity.Id }, ViewModelHelper.Convert(entity));
         }
@@ -144,7 +147,7 @@ namespace Meetings.API.Controllers
         [HttpDelete("{attendeeId}")]
         public async Task<ActionResult<AttendeeViewModel>> DeleteAttendee(int meetingId, int attendeeId)
         {
-            var entity = await _repository.GetWithRolesAsync(attendeeId);
+            var entity = await _attendeeRepository.GetWithRolesAsync(attendeeId);
 
             if (null == entity)
             {
@@ -156,23 +159,23 @@ namespace Meetings.API.Controllers
                 return BadRequest();
             }
 
-            var exists = _repository.Exists(meetingId);
+            var exists = _meetingRepository.Exists(meetingId);
 
             if (false == exists)
             {
                 return BadRequest();
             }
 
-            _repository.Remove(entity);
+            _attendeeRepository.Remove(entity);
 
-            await _repository.CompleteAsync();
+            await _attendeeRepository.CompleteAsync();
 
             return ViewModelHelper.Convert(entity);
         }
 
         private bool AttendeeExists(int attendeeId)
         {
-            return _repository.Exists(attendeeId);
+            return _attendeeRepository.Exists(attendeeId);
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Members.DataAccess.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class TableMembersAddEmail : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,9 @@ namespace Members.DataAccess.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 255, nullable: false),
-                    Note = table.Column<string>(nullable: true),
-                    Active = table.Column<bool>(nullable: false)
+                    Email = table.Column<string>(maxLength: 255, nullable: false),
+                    Note = table.Column<string>(maxLength: 2048, nullable: true),
+                    Active = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {

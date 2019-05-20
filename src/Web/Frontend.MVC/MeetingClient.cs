@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Frontend.MVC.C
+namespace Frontend.MVC
 {
     public class MeetingClient
     {
