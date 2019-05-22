@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Members.Scraper
+﻿namespace Members.Scraper
 {
     public class Member
     {
@@ -12,6 +8,6 @@ namespace Members.Scraper
 
         public string Email { get; set; }
 
-        public string Title { get; set; }
+        public string Rank { get; set; }
     }
 }

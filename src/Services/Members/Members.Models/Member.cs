@@ -11,5 +11,9 @@
         public string Note { get; set; }
 
         public bool Active { get; set; }
+
+        public int ToastmastersId { get; set; }
+
+        public string Rank { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Members.API
 {
@@ -26,7 +27,19 @@ namespace Members.API
             var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Members;Integrated Security=True";
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
-                     
+
+            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
+            {
+                services.AddSingleton<IBus>(sp =>
+                {
+                    var logger = sp.GetRequiredService<ILogger<Bus>>();
+                    var serviceBusConnectionString = Configuration.GetConnectionString("ServiceBus");
+                    var queueName = Configuration.GetValue<string>("QueueName");
+
+                    return new Bus(serviceBusConnectionString, queueName, logger);
+                });
+            }
+
             services
                 .AddCustomOptions(Configuration)
                 .AddSwagger();
@@ -58,6 +71,9 @@ namespace Members.API
             
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            // Warn up the bus
+            app.ApplicationServices.GetService<IBus>();
         }
     }
 
