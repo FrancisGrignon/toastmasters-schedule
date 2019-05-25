@@ -1,27 +1,22 @@
 ﻿using MailKit.Net.Smtp;
-using Meetings.Reminder.Models;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
+using Reminders.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Meetings.Reminder
+namespace Reminders
 {
-    class Program
+    public class ReminderService : IReminderService
     {
         private static IConfiguration Configuration { get; set; }
 
-        static async Task<int> Main(string[] args)
+        public async Task<int> Execute(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-                .AddJsonFile("appsettings.Development.json", optional: true);
-
-            Configuration = builder.Build();
+            Configuration = configuration;
 
             Console.WriteLine("Reading meetings");
 
@@ -74,7 +69,7 @@ namespace Meetings.Reminder
             return 0;
         }
 
-        private static string BuildHtml(Calendar calendar, List<Meeting> meetings, Member member)
+        private string BuildHtml(Calendar calendar, List<Meeting> meetings, Member member)
         {
             var root = Directory.GetCurrentDirectory();
             var path = Path.Combine(root, "templates\\email.html");
@@ -136,7 +131,7 @@ namespace Meetings.Reminder
             return sb.ToString();
         }
 
-        private static string BuildText(Calendar calendar, List<Meeting> meetings, Member member)
+        private string BuildText(Calendar calendar, List<Meeting> meetings, Member member)
         {
             var root = Directory.GetCurrentDirectory();
             var path = Path.Combine(root, "templates\\email.txt");
@@ -168,7 +163,7 @@ namespace Meetings.Reminder
             sb.Replace("###roles###", buffer.ToString());
 
             buffer.Length = 0;
-            
+
             for (int column = 1; column < calendar.ColumnCount; column++)
             {
                 buffer.AppendLine("----------------------------------");
@@ -189,7 +184,7 @@ namespace Meetings.Reminder
 
                 buffer.AppendLine();
             }
-            
+
             buffer.Append("----------------------------------");
 
             sb.Replace("###calendar###", buffer.ToString());
@@ -197,7 +192,7 @@ namespace Meetings.Reminder
             return sb.ToString();
         }
 
-        private static Calendar BuildCalendar(List<Meeting> meetings)
+        private Calendar BuildCalendar(List<Meeting> meetings)
         {
             var roles = new List<Role>();
 
@@ -206,7 +201,7 @@ namespace Meetings.Reminder
                 roles.Add(attendee.Role);
             }
 
-            var row = roles.Count + 2; 
+            var row = roles.Count + 2;
             var column = meetings.Count + 1;
 
             var calendar = new Calendar(row, column);
@@ -248,7 +243,7 @@ namespace Meetings.Reminder
             return calendar;
         }
 
-        private static void SendEmail(SmtpClient client, Member member, string subject, string htmlBody, string textBody)
+        private void SendEmail(SmtpClient client, Member member, string subject, string htmlBody, string textBody)
         {
             var config = Configuration;
 
@@ -269,7 +264,7 @@ namespace Meetings.Reminder
 
             message.From.Add(from);
             message.To.Add(to);
-    
+
             client.Send(message);
         }
     }
