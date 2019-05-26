@@ -1,5 +1,6 @@
 ﻿using Members.DataAccess;
 using Members.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Members.API.Controllers
         }
 
         // GET: api/Members
+        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
         {
@@ -27,6 +29,7 @@ namespace Members.API.Controllers
         }
 
         // GET: api/Members/5
+        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Member>> GetMember(int id)
         {
@@ -41,6 +44,7 @@ namespace Members.API.Controllers
         }
 
         // PUT: api/Members/5
+        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMember(int id, Member member)
         {
@@ -71,6 +75,7 @@ namespace Members.API.Controllers
         }
 
         // POST: api/Members
+        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember(Member member)
         {
@@ -81,6 +86,7 @@ namespace Members.API.Controllers
         }
 
         // DELETE: api/Members/5
+        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Member>> DeleteMember(int id)
         {

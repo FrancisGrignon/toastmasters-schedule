@@ -1,4 +1,6 @@
-﻿using Members.DataAccess;
+﻿using Members.API.Helpers;
+using Members.API.Services;
+using Members.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace Members.API
 {
@@ -40,6 +44,8 @@ namespace Members.API
                 });
             }
 
+            services.AddTransient<IApiKeysService, ApiKeysService>();
+
             services
                 .AddCustomOptions(Configuration)
                 .AddSwagger();
@@ -68,7 +74,9 @@ namespace Members.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Toastmasters - Members HTTP API");
                 c.RoutePrefix = string.Empty;
             });
-            
+
+            app.ApplyApiKeyValidation();
+
             app.UseHttpsRedirection();
             app.UseMvc();
 
@@ -116,10 +124,31 @@ namespace Members.API
                     Description = "The Members Microservice HTTP API.",
                     TermsOfService = "Terms Of Service"
                 });
+                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please provide your api key",
+                    Name = "x-api-key",
+                    Type = "apiKey"
+                });
+
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", new string[] { } },
+                };
+
+                options.AddSecurityRequirement(security);
             });
 
             return services;
 
+        }
+
+        public static IApplicationBuilder ApplyApiKeyValidation(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ApiKeyValidatorsMiddleware>();
+
+            return app;
         }
     }
 }
