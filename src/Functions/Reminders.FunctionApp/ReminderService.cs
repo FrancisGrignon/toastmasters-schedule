@@ -1,43 +1,53 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MimeKit;
-using Reminders.Models;
-using System;
+using Reminders.FunctionApp.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
 
-namespace Reminders
+namespace Reminders.FunctionApp
 {
     public class ReminderService : IReminderService
     {
-        private static IConfiguration Configuration { get; set; }
+        private IConfiguration Configuration { get; set; }
 
-        public async Task<int> Execute(IConfiguration configuration)
+        private ExecutionContext Context { get; set; }
+
+        private ILogger Log { get; set; }
+
+        public ReminderService(IConfiguration configuration, ILogger log, ExecutionContext context)
         {
             Configuration = configuration;
+            Context = context;
+            Log = log;
+        }
 
-            Console.WriteLine("Reading meetings");
+        public async Task<int> Execute()
+        {
+            Log.LogInformation("Reading meetings");
 
-            var meetings = await new MeetingClient(Configuration).GetMeetingPlanning();
+            var meetings = await new MeetingClient(Configuration).GetPlanning();
 
-            Console.WriteLine("Reading members");
+            Log.LogInformation("Reading members");
 
             var members = await new MemberClient(Configuration).GetAll();
 
-            string htmlBody, textBody;
+            string htmlBody = null, textBody;
 
             var date = meetings[0].Date.ToString("yyyy-MM-dd");
             var theme = meetings[0].Name;
             var subject = $"Les Orateurs - {date} (Thème : {theme})";
 
-            Console.WriteLine("Preparing calendar");
+            Log.LogInformation("Preparing calendar");
 
             var calendar = BuildCalendar(meetings);
             var mailServer = Configuration["MailServer"];
 
-            Console.WriteLine($"Connecting to mail server {mailServer}");
+            Log.LogInformation($"Connecting to mail server {mailServer}");
 
             using (var client = new SmtpClient())
             {
@@ -51,12 +61,13 @@ namespace Reminders
 
                 foreach (var member in members)
                 {
-                    Console.WriteLine($"Formating email for {member.Name}");
+                    Log.LogInformation($"Formating email for {member.Name}");
 
-                    htmlBody = BuildHtml(calendar, meetings, member);
+                    // Html function not ready
+                    // htmlBody = BuildHtml(calendar, meetings, member);
                     textBody = BuildText(calendar, meetings, member);
 
-                    Console.WriteLine($"Sending email to {member.Name}");
+                    Log.LogInformation($"Sending email to {member.Name}");
 
                     SendEmail(client, member, subject, htmlBody, textBody);
 
@@ -71,8 +82,7 @@ namespace Reminders
 
         private string BuildHtml(Calendar calendar, List<Meeting> meetings, Member member)
         {
-            var root = Directory.GetCurrentDirectory();
-            var path = Path.Combine(root, "templates\\email.html");
+            var path = Path.Combine(Context.FunctionAppDirectory, "templates\\email.html");
             var sb = new StringBuilder(File.ReadAllText(path));
 
             sb.Replace("###name###", member.Name);
@@ -133,8 +143,7 @@ namespace Reminders
 
         private string BuildText(Calendar calendar, List<Meeting> meetings, Member member)
         {
-            var root = Directory.GetCurrentDirectory();
-            var path = Path.Combine(root, "templates\\email.txt");
+            var path = Path.Combine(Context.FunctionAppDirectory, "templates\\email.txt");
             var sb = new StringBuilder(File.ReadAllText(path));
 
             sb.Replace("###name###", member.Name);
@@ -247,11 +256,17 @@ namespace Reminders
         {
             var config = Configuration;
 
-            BodyBuilder bodyBuilder = new BodyBuilder
+            BodyBuilder bodyBuilder = new BodyBuilder();
+
+            if (null != htmlBody)
             {
-                HtmlBody = htmlBody,
-                TextBody = textBody
-            };
+                bodyBuilder.HtmlBody = htmlBody;
+            }
+
+            if (null != textBody)
+            {
+                bodyBuilder.TextBody = textBody;
+            }
 
             MimeMessage message = new MimeMessage
             {

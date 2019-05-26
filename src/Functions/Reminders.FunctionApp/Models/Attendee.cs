@@ -1,4 +1,4 @@
-﻿namespace Reminders.Models
+﻿namespace Reminders.FunctionApp.Models
 {
     public class Attendee
     {

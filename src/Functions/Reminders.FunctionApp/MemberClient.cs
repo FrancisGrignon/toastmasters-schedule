@@ -1,11 +1,11 @@
 ﻿using Flurl;
 using Flurl.Http;
-using Meetings.Reminder.Models;
 using Microsoft.Extensions.Configuration;
+using Reminders.FunctionApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Meetings.Reminder
+namespace Reminders.FunctionApp
 {
     public class MemberClient
     {

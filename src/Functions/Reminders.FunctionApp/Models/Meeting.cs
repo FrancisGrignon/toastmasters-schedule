@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Reminders.Models
+namespace Reminders.FunctionApp.Models
 {
     public class Meeting
     {

@@ -362,3 +362,8 @@ MigrationBackup/
 **/mailsettings.development.json
 **/mailsettings.staging.json
 **/mailsettings.production.json
+
+# Ignore mailsettings
+**/local.development.json
+**/local.staging.json
+**/local.production.json

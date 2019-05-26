@@ -1,4 +1,4 @@
-﻿namespace Meetings.Reminder.Models
+﻿namespace Reminders.FunctionApp.Models
 {
     public class Member
     {

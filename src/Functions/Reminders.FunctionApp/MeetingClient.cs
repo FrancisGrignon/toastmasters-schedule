@@ -1,11 +1,11 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Configuration;
-using Reminders.Models;
+using Reminders.FunctionApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Reminders
+namespace Reminders.FunctionApp
 {
     public class MeetingClient
     {
@@ -16,14 +16,14 @@ namespace Reminders
             _baseUrl = config["MeetingServiceUri"];
         }
 
-        public Task<List<Meeting>> GetUpcoming()
+        public Task<Meeting> GetUpcoming()
         {
             return _baseUrl
                 .AppendPathSegment("v1/meetings/upcoming")
-                .GetJsonAsync<List<Meeting>>();
+                .GetJsonAsync<Meeting>();
         }
 
-        public Task<List<Meeting>> GetMeetingPlanning()
+        public Task<List<Meeting>> GetPlanning()
         {
             return _baseUrl
                 .AppendPathSegment("v1/meetings/planning")

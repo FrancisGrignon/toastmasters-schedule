@@ -50,7 +50,12 @@ namespace Meetings.API.Controllers
         {
             var entites = await _meetingRepository.GetPlanningWithAttenteesAndRolesAsync(1);
 
-            return Ok(ViewModelHelper.Convert(entites));
+            if (null == entites || 0 == entites.Length)
+            {
+                return Ok(null);
+            }
+
+            return Ok(ViewModelHelper.Convert(entites[0]));
         }
 
         // GET: api/Meetings/5
