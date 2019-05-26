@@ -1,5 +1,7 @@
-﻿using Meetings.API.Infrastructure.Core.Repositories;
+﻿using Meetings.API.Helpers;
+using Meetings.API.Infrastructure.Core.Repositories;
 using Meetings.API.Infrastructure.Persistence.Repositories;
+using Meetings.API.Services;
 using Meetings.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +12,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Meetings.API
@@ -35,6 +39,7 @@ namespace Meetings.API
                 .AddCustomDbContext(Configuration)
                 .AddCustomOptions(Configuration)
                 .AddRepositories()
+                .AddServices()
                 .AddSwagger();
         }
 
@@ -58,6 +63,7 @@ namespace Meetings.API
                 c.RoutePrefix = string.Empty;
             });
 
+            app.ApplyApiKeyValidation();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
@@ -131,13 +137,28 @@ namespace Meetings.API
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new Info
                 {
                     Title = "Toastmasters - Meetings HTTP API",
                     Version = "v1",
                     Description = "The Meetings Microservice HTTP API.",
                     TermsOfService = "Terms Of Service"
                 });
+
+                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please provide your api key",
+                    Name = "x-api-key",
+                    Type = "apiKey"
+                });
+
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", new string[] { } },
+                };
+
+                options.AddSecurityRequirement(security);
 
                 options.CustomSchemaIds(SchemaIdStrategy);
             });
@@ -151,8 +172,23 @@ namespace Meetings.API
             services.AddTransient<IAttendeeRepository, AttendeeRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
+            services.AddTransient<IApiKeysService, ApiKeysService>();
 
             return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddTransient<IApiKeysService, ApiKeysService>();
+
+            return services;
+        }
+
+        public static IApplicationBuilder ApplyApiKeyValidation(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ApiKeyValidatorsMiddleware>();
+
+            return app;
         }
     }
 }
