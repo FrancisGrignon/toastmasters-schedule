@@ -9,17 +9,22 @@ namespace Reminders.FunctionApp
 {
     public class MeetingClient
     {
+        public const string API_KEY_HEADER_NAME = "x-api-key";
+
         private readonly string _baseUrl;
+        private readonly string _apiKey;
 
         public MeetingClient(IConfiguration config)
         {
             _baseUrl = config["MeetingServiceUri"];
+            _apiKey = config["MeetingServiceApiKey"];
         }
 
         public Task<Meeting> GetUpcoming()
         {
             return _baseUrl
                 .AppendPathSegment("v1/meetings/upcoming")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
                 .GetJsonAsync<Meeting>();
         }
 
@@ -27,6 +32,7 @@ namespace Reminders.FunctionApp
         {
             return _baseUrl
                 .AppendPathSegment("v1/meetings/planning")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
                 .GetJsonAsync<List<Meeting>>();
         }
     }

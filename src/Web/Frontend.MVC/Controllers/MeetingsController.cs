@@ -27,30 +27,35 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Meetings
-        public async Task<ActionResult> Planning()
+        public async Task<ActionResult> Calendar()
         {
             var client = new MeetingClient(_config);
 
-            var roles = await client.GetRoles();
-            var meetings = await client.GetPlanning();
-            
+            var meetings = await client.GetPlanning();            
 
             var x = meetings.Count + 1;
-            var y = roles.Count + 2;
-            var cell = new Planning(x, y);
+            var y = meetings[0].Attendees.Count() + 2;
+            var calendar = new Calendar(x, y);
 
             // Add roles
-            int m = roles.Count;
+            int m = meetings[0].Attendees.Count();
 
-            cell[0, 0] = string.Empty;
-            cell[0, 1] = string.Empty;
+            calendar[0, 0] = new CalendarCell { AttendeeId = 0, Value = string.Empty };
+            calendar[0, 1] = new CalendarCell { AttendeeId = 0, Value = string.Empty };
 
-            for (int k = 0; k < m; k++)
+            int k = 0;
+
+            foreach (var attendee in meetings[0].Attendees)
             {
-                cell[0, k + 2] = roles[k].Name;
+                calendar[0, k + 2] = new CalendarCell { AttendeeId = 0, Value = attendee.Role.Name };
+
+                k++;
             }
 
             int i = 0, j = 0;
+            string value;
+
+            CalendarCell cell;
 
             foreach (var meeting in meetings)
             {
@@ -58,22 +63,36 @@ namespace Frontend.MVC.Controllers
                 j = 0;
 
                 // Add Date
-                cell[i, 0] = meeting.Date.ToLocalTime().ToString("yyyy-MM-dd");
+                value = meeting.Date.ToLocalTime().ToString("yyyy-MM-dd");
+                calendar[i, 0] = new CalendarCell { MeetingId = meeting.Id, AttendeeId = 0, Value = value };
 
                 // Add subject
-                cell[i, 1] = meeting.Name;
+                calendar[i, 1] = new CalendarCell { MeetingId = meeting.Id, AttendeeId = 0, Value = meeting.Name };
 
                 j = 2;
 
+                // Add member
                 foreach (var attendee in meeting.Attendees)
                 {
-                    cell[i, j] = attendee.Member?.Name ?? string.Empty;
+                    value = attendee.Member?.Name ?? string.Empty;
+                    cell = new CalendarCell { MeetingId = meeting.Id, AttendeeId = attendee.Id, Value = value };
+                                       
+                    if (null == attendee.Member)
+                    {
+                        cell.CanAccept = true;
+                    }
+                    else
+                    {
+                        cell.CanRefuse = true;
+                    }
+                        
+                    calendar[i, j] = cell;
 
                     j++;
                 }
             }
 
-            return View(cell);
+            return View(calendar);
         }
 
         // GET: Meetings
@@ -139,6 +158,49 @@ namespace Frontend.MVC.Controllers
 
             return View(meeting);
         }
+
+        public async Task<ActionResult> Accept(int id, int attendeeId)
+        {
+            var client = new MeetingClient(_config);
+
+            var meeting = await client.Get(id);
+
+            if (null == meeting)
+            {
+                return NotFound();
+            }
+
+            var attendee = meeting.Attendees.Where(p => attendeeId == p.Id).SingleOrDefault();
+
+            if (null == attendee)
+            {
+                return NotFound();
+            }
+
+            return View(attendee);
+        }
+
+        public async Task<ActionResult> Refuse(int id, int attendeeId)
+        {
+            var client = new MeetingClient(_config);
+
+            var meeting = await client.Get(id);
+
+            if (null == meeting)
+            {
+                return NotFound();
+            }
+
+            var attendee = meeting.Attendees.Where(p => attendeeId == p.Id).SingleOrDefault();
+
+            if (null == attendee)
+            {
+                return NotFound();
+            }
+
+            return View(attendee);
+        }
+
 
         // POST: Meetings/Create
         [HttpPost]

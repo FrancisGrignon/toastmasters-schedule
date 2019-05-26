@@ -1,14 +1,14 @@
 ﻿namespace Frontend.MVC.Models
 {
-    public class Planning
+    public class Calendar
     {
         private readonly int _maxX;
         private readonly int _maxY;
-        private readonly string[,] _contents;
+        private readonly CalendarCell[,] _contents;
 
-        public Planning(int x, int y)
+        public Calendar(int x, int y)
         {
-            _contents = new string[x, y];
+            _contents = new CalendarCell[x, y];
             _maxX = x;
             _maxY = y;
         }
@@ -17,7 +17,7 @@
 
         public int MaxX => _maxX;
 
-        public string this[int x, int y]
+        public CalendarCell this[int x, int y]
         {
             get
             {

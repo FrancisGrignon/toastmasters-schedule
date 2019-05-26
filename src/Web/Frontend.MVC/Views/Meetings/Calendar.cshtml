@@ -1,4 +1,4 @@
-﻿@model Planning
+﻿@model Calendar
 
 @{
     ViewData["Title"] = "Rencontre";
@@ -13,15 +13,15 @@
                 @for (int x = 0; x < Model.MaxX; x++)
                 {
                 <td>
-                    @Model[x, 0]
-                </td>
+                    @Model[x, 0].Value
+                  </td>
                 }
             </tr>
             <tr>
                 @for (int x = 0; x < Model.MaxX; x++)
                 {
                 <td>
-                    @Model[x, 1]
+                    @Model[x, 1].Value
                 </td>
                 }
             </tr>
@@ -33,7 +33,18 @@
                 @for (int x = 0; x < Model.MaxX; x++)
                 {
                 <td>
-                    @Model[x, y]
+                    @if (Model[x, y].CanAccept)
+                    {
+                        @Html.ActionLink("[Accepter]", "Accept", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })
+                    }
+                    else if (Model[x, y].CanRefuse)
+                    {
+                        @Model[x, y].Value @Html.ActionLink("[X]", "Refuse", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })
+                    }
+                    else
+                    {
+                        <span>@Model[x, y].Value</span>
+                    }
                 </td>
                 }
             </tr>
