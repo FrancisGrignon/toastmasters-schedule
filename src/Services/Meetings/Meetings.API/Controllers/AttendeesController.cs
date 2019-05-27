@@ -40,7 +40,7 @@ namespace Meetings.API.Controllers
         [HttpGet("{attendeeId}")]
         public async Task<ActionResult<AttendeeViewModel>> GetAttendee(int meetingId, int attendeeId)
         {
-            var exists = _attendeeRepository.Exists(meetingId);
+            var exists = _meetingRepository.Exists(meetingId);
 
             if (false == exists)
             {
@@ -56,7 +56,7 @@ namespace Meetings.API.Controllers
 
             if (meetingId != entity.MeetingId)
             {
-                return BadRequest();
+                return BadRequest("Meeting don't match");
             }
 
             return ViewModelHelper.Convert(entity);
@@ -91,9 +91,16 @@ namespace Meetings.API.Controllers
                 return BadRequest();
             }
 
-            entity.MemberId = model.Member.Id;
-            entity.Member = model.Member.Name;
-
+            if (null == model.Member)
+            {
+                entity.MemberId = null;
+                entity.Member = null;
+            }
+            else
+            {
+                entity.MemberId = model.Member.Id;
+                entity.Member = model.Member.Name;
+            }
             _attendeeRepository.Update(entity);
 
             try

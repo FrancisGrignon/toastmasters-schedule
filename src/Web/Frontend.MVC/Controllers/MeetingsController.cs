@@ -4,16 +4,22 @@ using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Linq;
 using Frontend.MVC.Models;
+using NToastNotify;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System;
 
 namespace Frontend.MVC.Controllers
 {
     public class MeetingsController : Controller
     {
         private readonly IConfiguration _config;
+        private readonly IToastNotification _toastNotification;
 
-        public MeetingsController(IConfiguration config)
+        public MeetingsController(IConfiguration config, IToastNotification toastNotification)
         {
             _config = config;
+            _toastNotification = toastNotification;
         }
 
         // GET: Meetings
@@ -94,56 +100,7 @@ namespace Frontend.MVC.Controllers
 
             return View(calendar);
         }
-
-        // GET: Meetings
-        public async Task<ActionResult> Planning2()
-        {
-            var client = new MeetingClient(_config);
-
-            var roles = await client.GetRoles();
-            var meetings = await client.GetPlanning();
-            var x = meetings.Count + 1; 
-            var y = roles.Count + 2;
-
-            var cell = new string[x, y];
-
-            // Add roles
-            int m = roles.Count;
-
-            cell[0, 0] = string.Empty;
-            cell[0, 1] = string.Empty;
-
-            for (int k = 0; k < m; k++)
-            {
-                cell[0, k + 2] = roles[k].Name;
-            }
-
-            int i = 0, j = 0;
-
-            foreach (var meeting in meetings)
-            {
-                i++;
-                j = 0;
-
-                // Add Date
-                cell[i, 0] = meeting.Date.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
-
-                // Add subject
-                cell[i, 1] = meeting.Name;
-
-                j = 2;
-
-                foreach (var attendee in meeting.Attendees)
-                {
-                    cell[i, j] = attendee.Member?.Name ?? string.Empty;
-
-                    j++;
-                }
-            }
-
-            return View(cell);
-        }
-
+        
         // GET: Meetings/Details/5
         public async Task<ActionResult> Details(int id)
         {
@@ -177,7 +134,77 @@ namespace Frontend.MVC.Controllers
                 return NotFound();
             }
 
-            return View(attendee);
+            var model = new AcceptViewModel
+            {
+                AttendeeId = attendeeId,
+                MeetingDate = meeting.Date,
+                MeetingId = meeting.Id,
+                MeetingName = meeting.Name,
+                RoleName = attendee.Role.Name
+            };
+
+            model.Members = new List<SelectListItem>();
+
+            var memberClient = new MemberClient(_config);
+
+            var members = await memberClient.GetAll();
+
+            model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }).ToList();
+
+            return View(model);
+        }
+
+        // POST: Meetings/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Accept(int id, [FromForm]AcceptViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var meetingClient = new MeetingClient(_config);
+                    var memberClient = new MemberClient(_config);
+
+                    var attendee = await meetingClient.GetAttendee(id, model.AttendeeId);
+
+                    if (null == attendee)
+                    {
+                        return BadRequest("Attendee not found");
+                    }
+
+                    var member = await memberClient.Get(model.MemberId);
+
+                    if (null == member)
+                    {
+                        return BadRequest("Member not found");
+                    }
+
+                    if (null == attendee.Member)
+                    {
+                        attendee.Member = new Member();
+                        attendee.Member.Id = member.Id;
+                        attendee.Member.Name = member.Name;
+
+                        var response = await meetingClient.UpdateAttendee(id, attendee);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            _toastNotification.AddSuccessToastMessage($"Merci, le role {attendee.Role.Name} a été assigné à {attendee.Member.Name}.");
+
+                            return RedirectToAction(nameof(Calendar));
+                        }
+                    }  
+
+                    return RedirectToAction(nameof(Calendar));
+                }
+                catch
+                {
+                    return View();
+                }
+            }
+
+            return View(model);
         }
 
         public async Task<ActionResult> Refuse(int id, int attendeeId)
@@ -198,9 +225,60 @@ namespace Frontend.MVC.Controllers
                 return NotFound();
             }
 
-            return View(attendee);
+            var model = new RefuseViewModel
+            {
+                AttendeeId = attendeeId,
+                MeetingDate = meeting.Date,
+                MeetingId = meeting.Id,
+                MeetingName = meeting.Name,
+                RoleName = attendee.Role.Name,
+                MemberName = attendee.Member.Name,
+            };
+
+            return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Refuse(int id, [FromForm]RefuseViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var meetingClient = new MeetingClient(_config);
+                    var memberClient = new MemberClient(_config);
+
+                    var attendee = await meetingClient.GetAttendee(id, model.AttendeeId);
+
+                    if (null == attendee)
+                    {
+                        return BadRequest("Attendee not found");
+                    }
+
+                    var member = attendee.Member;
+
+                    attendee.Member = null;
+
+                    var response = await meetingClient.UpdateAttendee(id, attendee);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _toastNotification.AddSuccessToastMessage($"Merci, le role {attendee.Role.Name} a été retiré à {member.Name}.");
+
+                        return RedirectToAction(nameof(Calendar));
+                    }
+
+                    return RedirectToAction(nameof(Calendar));
+                }
+                catch
+                {
+                    return View();
+                }
+            }
+
+            return View(model);
+        }
 
         // POST: Meetings/Create
         [HttpPost]

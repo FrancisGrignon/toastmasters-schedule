@@ -39,7 +39,7 @@
                     }
                     else if (Model[x, y].CanRefuse)
                     {
-                        @Model[x, y].Value @Html.ActionLink("[X]", "Refuse", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })
+                    <span>@Model[x, y].Value</span> <span>@Html.ActionLink("[X]", "Refuse", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })</span>
                     }
                     else
                     {

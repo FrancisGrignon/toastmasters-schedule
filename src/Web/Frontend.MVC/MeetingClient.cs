@@ -3,6 +3,7 @@ using Flurl.Http;
 using Frontend.MVC.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Frontend.MVC
@@ -42,6 +43,22 @@ namespace Frontend.MVC
                 .AppendPathSegment($"v1/meetings/planning")
                 .WithHeader(API_KEY_HEADER_NAME, _apiKey)
                 .GetJsonAsync<List<Meeting>>();
+        }
+
+        public async Task<Attendee> GetAttendee(int meetingId, int attendeeId)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"v1/meetings/{meetingId}/attendees/{attendeeId}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .GetJsonAsync<Attendee>();
+        }
+
+        public async Task<HttpResponseMessage> UpdateAttendee(int meetingId, Attendee attendee)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"v1/meetings/{meetingId}/attendees/{attendee.Id}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PutJsonAsync(attendee);
         }
 
         public Task<List<Role>> GetRoles()
