@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NToastNotify;
+using System;
 
 namespace Frontend.MVC
 {
@@ -35,6 +33,44 @@ namespace Frontend.MVC
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc().AddNToastNotifyToastr();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            //services.AddMvc().AddRazorPagesOptions(options =>
+            //{
+            //    options.Conventions.AuthorizeFolder("/Meetings");
+            //});
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Login");
+                options.AccessDeniedPath = new PathString("/Login");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+            });
+
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    // Cookie settings
+            //    options.Cookie.HttpOnly = true;
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+            //    options.LoginPath = "/Login";
+            //    options.AccessDeniedPath = "/Login";
+            //    options.SlidingExpiration = true;
+            //});
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +91,7 @@ namespace Frontend.MVC
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseNToastNotify();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

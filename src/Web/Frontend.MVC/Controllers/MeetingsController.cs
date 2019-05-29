@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Frontend.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Linq;
-using Frontend.MVC.Models;
-using NToastNotify;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
+using NToastNotify;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
+    [Authorize]
     public class MeetingsController : Controller
     {
         private readonly IConfiguration _config;
