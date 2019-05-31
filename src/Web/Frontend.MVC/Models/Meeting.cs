@@ -10,6 +10,7 @@ namespace Frontend.MVC.Models
 
         [Required]
         [MaxLength(255)]
+        [Display(Name = "Thème")]
         public string Name { get; set; }
 
         [Required]

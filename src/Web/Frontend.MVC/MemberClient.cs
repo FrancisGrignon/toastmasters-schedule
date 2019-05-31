@@ -3,6 +3,7 @@ using Flurl.Http;
 using Frontend.MVC.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Frontend.MVC
@@ -34,6 +35,18 @@ namespace Frontend.MVC
                 .AppendPathSegment($"members/{id}")
                 .WithHeader(API_KEY_HEADER_NAME, _apiKey)
                 .GetJsonAsync<Member>();
+        }
+
+        public async Task<bool> Exists(string email)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"members/exists")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PostJsonAsync(new
+                {
+                    email
+                })
+                .ReceiveJson<bool>();
         }
     }
 }

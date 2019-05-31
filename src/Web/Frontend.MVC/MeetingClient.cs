@@ -53,6 +53,30 @@ namespace Frontend.MVC
                 .GetJsonAsync<Attendee>();
         }
 
+        public async Task<HttpResponseMessage> Create(Meeting meeting)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"v1/meetings")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PostJsonAsync(meeting);
+        }
+
+        public async Task<HttpResponseMessage> Delete(Meeting meeting)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"v1/meetings/{meeting.Id}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .DeleteAsync();
+        }
+
+        public async Task<HttpResponseMessage> Update(Meeting meeting)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"v1/meetings/{meeting.Id}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PutJsonAsync(meeting);
+        }
+
         public async Task<HttpResponseMessage> UpdateAttendee(int meetingId, Attendee attendee)
         {
             return await _baseUrl

@@ -45,7 +45,7 @@ namespace Frontend.MVC.Controllers
                         return RedirectToAction(nameof(Index), "Home");
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     return View(model);
                 }

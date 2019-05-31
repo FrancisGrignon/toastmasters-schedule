@@ -1,6 +1,7 @@
 ﻿using Members.DataAccess;
 using Members.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -41,6 +42,22 @@ namespace Members.API.Controllers
             }
 
             return member;
+        }
+
+        // GET: api/Members/Exists
+        [HttpPost("Exists")]
+        public async Task<ActionResult<bool>> PostExists(IFormCollection form)
+        {
+            var email = form["email"];
+
+            var exists = await _context.Members.Where(p => p.Email == email).AnyAsync();
+
+            if (exists)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         // PUT: api/Members/5
