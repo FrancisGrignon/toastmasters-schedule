@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,11 +41,6 @@ namespace Frontend.MVC
                 options.Lockout.AllowedForNewUsers = true;
             });
 
-            //services.AddMvc().AddRazorPagesOptions(options =>
-            //{
-            //    options.Conventions.AuthorizeFolder("/Meetings");
-            //});
-
             services.AddAuthentication(options =>
             {
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -58,19 +52,6 @@ namespace Frontend.MVC
                 options.AccessDeniedPath = new PathString("/Login");
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
             });
-
-            //services.ConfigureApplicationCookie(options =>
-            //{
-            //    // Cookie settings
-            //    options.Cookie.HttpOnly = true;
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-            //    options.LoginPath = "/Login";
-            //    options.AccessDeniedPath = "/Login";
-            //    options.SlidingExpiration = true;
-            //});
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +64,7 @@ namespace Frontend.MVC
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

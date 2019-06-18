@@ -31,7 +31,7 @@ namespace Meetings.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MeetingViewModel>>> GetMeeting()
         {
-            var entites = await _meetingRepository.GetAllAsync();
+            var entites = await _meetingRepository.GetAllAsync(orderBy => orderBy.Date);
 
             return Ok(ViewModelHelper.Convert(entites));
         }

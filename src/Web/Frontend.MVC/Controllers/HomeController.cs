@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Frontend.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using Frontend.MVC.Models;
+using System.Diagnostics;
 
 namespace Frontend.MVC.Controllers
 {
@@ -12,7 +8,7 @@ namespace Frontend.MVC.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Calendar");
         }
 
         public IActionResult Privacy()

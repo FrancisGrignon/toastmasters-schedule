@@ -19,6 +19,11 @@ Parse email
 
 Roles statistics
 
+Release informations
+
+https://orateurs.azurewebsites.net/
+https://orateur-members-api.azurewebsites.net/
+https://orateur-meetings-api.azurewebsites.net/api/
 
 
 Role

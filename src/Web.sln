@@ -23,7 +23,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reminders", "Reminders", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminders.FunctionApp", "Functions\Reminders.FunctionApp\Reminders.FunctionApp.csproj", "{E2DAF069-9C10-46A7-8C9C-4F1BCC6ABC8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Members.FunctionApp", "Functions\Members.FunctionApp\Members.FunctionApp.csproj", "{B78B2CA3-DB1D-40A1-8FF8-85AAFE559EC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Members.FunctionApp", "Functions\Members.FunctionApp\Members.FunctionApp.csproj", "{B78B2CA3-DB1D-40A1-8FF8-85AAFE559EC9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robot.FunctionApp", "Functions\Robot.FunctionApp\Robot.FunctionApp.csproj", "{24D2518F-3AB4-4B95-A923-6561DD583736}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{72E25FCC-D540-4B94-A64A-94BFD5E31E13}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +70,10 @@ Global
 		{B78B2CA3-DB1D-40A1-8FF8-85AAFE559EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B78B2CA3-DB1D-40A1-8FF8-85AAFE559EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B78B2CA3-DB1D-40A1-8FF8-85AAFE559EC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D2518F-3AB4-4B95-A923-6561DD583736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D2518F-3AB4-4B95-A923-6561DD583736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D2518F-3AB4-4B95-A923-6561DD583736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D2518F-3AB4-4B95-A923-6561DD583736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

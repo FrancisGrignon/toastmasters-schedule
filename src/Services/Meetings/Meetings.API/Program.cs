@@ -27,7 +27,7 @@ namespace Meetings.API
             {
                 Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 
-                var host = CreateWebHostBuilder(args);
+                var host = CreateWebHostBuilder(args, configuration);
 
                 host.MigrateDbContext<MeetingContext>((context, services) =>
                 {
@@ -55,8 +55,9 @@ namespace Meetings.API
             }
         }
 
-        public static IWebHost CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();
@@ -72,19 +73,6 @@ namespace Meetings.API
               .CreateLogger();
 
             return logger;
-                                 
-            //var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-            // var logstashUrl = configuration["Serilog:LogstashgUrl"];
-            //  return new LoggerConfiguration()
-            //.MinimumLevel.Debug()
-            //                .Enrich.WithProperty("ApplicationContext", AppName)
-            //.Enrich.FromLogContext()
-            //.WriteTo.ColoredConsole()
-            //                .ReadFrom.Configuration(configuration)
-            //.CreateLogger();
-
-            //                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
-            //    .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
         }
 
         private static IConfiguration GetConfiguration()
@@ -93,8 +81,6 @@ namespace Meetings.API
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-
-            // .SetBasePath(Directory.GetCurrentDirectory())               
 
             return builder.Build();
         }

@@ -1,12 +1,8 @@
 ﻿using Frontend.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using NToastNotify;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
@@ -170,11 +166,11 @@ namespace Frontend.MVC.Controllers
                     return NotFound();
                 }
 
-                var response = await client.Delete(model);
+                var response = await client.Delete(meeting);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _toastNotification.AddSuccessToastMessage($"La rencontre du {model.Date} a été modifiée.");
+                    _toastNotification.AddSuccessToastMessage($"La rencontre du {meeting.Date} a été supprimée.");
 
                     return RedirectToAction(nameof(Index));
                 }

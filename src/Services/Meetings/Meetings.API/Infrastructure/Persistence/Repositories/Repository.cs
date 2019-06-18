@@ -18,37 +18,42 @@
             Context = context;
         }
 
-        public TEntity Get(int id)
+        public virtual TEntity Get(int id)
         {
-            return Context.Set<TEntity>().Find(id);
+            return Context.Set<TEntity>().Where(p => p.Active && id == p.Id).SingleOrDefault();
         }
 
-        public Task<TEntity> GetAsync(int id)
+        public virtual Task<TEntity> GetAsync(int id)
         {
-            return Context.Set<TEntity>().FindAsync(id);
+            return Context.Set<TEntity>().Where(p => p.Active && id == p.Id).SingleOrDefaultAsync();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public virtual IEnumerable<TEntity> GetAll()
         {
-            return Context.Set<TEntity>().ToArray();
+            return Context.Set<TEntity>().Where(p => p.Active);
         }
 
-        public async Task<TEntity[]> GetAllAsync()
+        public virtual async Task<TEntity[]> GetAllAsync()
         {
-            return await Context.Set<TEntity>().ToArrayAsync();
+            return await Context.Set<TEntity>().Where(p => p.Active).ToArrayAsync();
         }
 
-        public IEnumerable<TEntity> GetAll<TOrderKey>(Expression<Func<TEntity, TOrderKey>> orderBy)
+        public virtual IEnumerable<TEntity> GetAll<TOrderKey>(Expression<Func<TEntity, TOrderKey>> orderBy)
         {
-            return Context.Set<TEntity>().OrderBy(orderBy).ToArray();
+            return Context.Set<TEntity>().Where(p => p.Active).OrderBy(orderBy).ToArray();
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public virtual Task<TEntity[]> GetAllAsync<TOrderKey>(Expression<Func<TEntity, TOrderKey>> orderBy)
+        {
+            return Context.Set<TEntity>().Where(p => p.Active).OrderBy(orderBy).ToArrayAsync();
+        }
+
+        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().Where(predicate);
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties = null)
+        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties = null)
         {
             IQueryable<TEntity> query = Context.Set<TEntity>();
 
@@ -73,7 +78,7 @@
             return orderBy(query).ToArray();
         }
 
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().SingleOrDefault(predicate);
         }
@@ -105,8 +110,6 @@
         {
             entity.Active = false;
             entity.UpdatedAt = DateTime.UtcNow;
-
-           // Context.Set<TEntity>().Remove(entity);
         }
 
         public virtual void RemoveRange(IEnumerable<TEntity> entities)
@@ -115,8 +118,6 @@
             {
                 Remove(entity);
             }
-
-            //Context.Set<TEntity>().RemoveRange(buffer);
         }
 
         public void Update(TEntity entity)
@@ -138,14 +139,12 @@
 
         public bool Exists(int id)
         {
-            var entity = Get(id);
-            
-            if (null == entity)
-            {
-                return false;
-            }
+            return Context.Set<TEntity>().Where(p => p.Active && id == p.Id).Any();
+        }
 
-            return true;
+        public Task<bool> ExistsAsync(int id)
+        {
+            return Context.Set<TEntity>().Where(p => p.Active && id == p.Id).AnyAsync();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Members.API
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Members;Integrated Security=True";
+            var connection = Configuration.GetConnectionString("Database");
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
 

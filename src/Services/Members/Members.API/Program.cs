@@ -22,7 +22,7 @@ namespace Members.API
             {
                 Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 
-                var host = CreateWebHostBuilder(args);
+                var host = CreateWebHostBuilder(args, configuration);
 
                 Log.Information("Starting web host");
 
@@ -42,8 +42,9 @@ namespace Members.API
             }
         }
 
-        public static IWebHost CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();

@@ -75,9 +75,9 @@ namespace Meetings.API
         {
             services.AddDbContext<MeetingContext>(options =>
             {
-                var config = configuration["ConnectionString"];
+                var connectionString = configuration.GetConnectionString("MeetingsDatabase");
 
-                options.UseSqlServer(configuration["ConnectionString"],
+                options.UseSqlServer(connectionString,
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);

@@ -20,7 +20,7 @@ namespace Members.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
                 var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Members;Integrated Security=True";
 

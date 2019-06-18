@@ -19,11 +19,6 @@ namespace Meetings.Infrastructure
             _loggerFactory = loggerFactory;
         }
 
-        //public MeetingContext(ILoggerFactory loggerFactory)
-        //{
-        //    _loggerFactory = loggerFactory;
-        //}
-
         public DbSet<Attendee> Attendees { get; set; }
 
         public DbSet<Meeting> Meetings { get; set; }
@@ -32,19 +27,17 @@ namespace Meetings.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if (!optionsBuilder.IsConfigured)
-        //    {
+            if (false == optionsBuilder.IsConfigured)
+            {
                 var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Meetings;Integrated Security=True";
 
-            optionsBuilder.UseSqlServer(connection);
+                optionsBuilder.UseSqlServer(connection);
+            }
 
-            optionsBuilder.UseLoggerFactory(_loggerFactory);
-
-            //if (null != _loggerFactory)
-            //{
-            //    optionsBuilder.UseLoggerFactory(_loggerFactory);
-            //}
-            //    }
+            if (null != _loggerFactory)
+            {
+                optionsBuilder.UseLoggerFactory(_loggerFactory);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

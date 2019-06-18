@@ -59,62 +59,7 @@ namespace Members.FunctionApp
 
             Log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         }
-
-        static async Task<int> Main(string[] args)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.Development.json", optional: true);
-
-            configuration = builder.Build();
-
-            var connectionString = configuration.GetConnectionString("ServiceBus");
-            var queueName = configuration["QueueName"];
-
-            queueClient = new QueueClient(connectionString, queueName);
-
-            int result;
-
-            try
-            {
-                var csv = await Download();
-                var members = Parse(csv);
-
-                foreach (var member in members)
-                {
-                    await SendMessagesAsync(member);
-                }
-
-                result = 0;
-            }
-            catch (Exception ex)
-            {
-                Log.LogError(ex.Message);
-
-                result = 1;
-            }
-
-            return result;
-        }
-
-        public static async Task<string> DownloadFile(string url)
-        {
-            using (var client = new HttpClient())
-            {
-                using (var result = await client.GetAsync(url))
-                {
-                    if (result.IsSuccessStatusCode)
-                    {
-                        return await result.Content.ReadAsStringAsync();
-                    }
-
-                }
-            }
-
-            return null;
-        }
-
+        
         public static List<Member> Parse(string csv)
         {
             Log.LogInformation("Parsing members from CSV");

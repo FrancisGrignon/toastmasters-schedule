@@ -18,6 +18,8 @@ namespace Meetings.API.Infrastructure.Core.Repositories
 
         IEnumerable<TEntity> GetAll<TOrderKey>(Expression<Func<TEntity, TOrderKey>> orderBy);
 
+        Task<TEntity[]> GetAllAsync<TOrderKey>(Expression<Func<TEntity, TOrderKey>> orderBy);
+
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties = null);
@@ -39,5 +41,7 @@ namespace Meetings.API.Infrastructure.Core.Repositories
         Task<int> CompleteAsync();
 
         bool Exists(int id);
+
+        Task<bool> ExistsAsync(int id);
     }
 }
