@@ -6,8 +6,6 @@
   },
   "ToastmastersUsername": "",
   "ToastmastersPassword": "",
-  "QueueName": "",
-  "ConnectionStrings": {
-    "ServiceBus": ""
-  }
+  "MemberServiceUri": null,
+  "MemberServiceApiKey": null,
 }

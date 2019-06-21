@@ -1,6 +1,6 @@
 ﻿namespace Members.FunctionApp
 {
-    public class Member
+    public class CsvMemberRow
     {
         public int ToastmastersId { get; set; }
 

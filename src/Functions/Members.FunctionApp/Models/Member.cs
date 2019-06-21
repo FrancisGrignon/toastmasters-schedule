@@ -1,4 +1,4 @@
-﻿namespace Members.Models
+﻿namespace Members.FunctionApp.Models
 {
     public class Member
     {
@@ -15,7 +15,5 @@
         public int ToastmastersId { get; set; }
 
         public string Rank { get; set; }
-
-        public bool Deleted { get; set; }
     }
 }

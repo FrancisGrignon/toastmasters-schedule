@@ -20,7 +20,7 @@ namespace Members.API
 
         public Bus(string connectionString, string queueName, ILogger<Bus> logger)
         {
-            queueClient = new QueueClient(connectionString, queueName);
+            queueClient = new QueueClient(connectionString, queueName, ReceiveMode.ReceiveAndDelete);
 
             _logger = logger;
 
@@ -38,7 +38,7 @@ namespace Members.API
 
                 // Indicates whether MessagePump should automatically complete the messages after returning from User Callback.
                 // False below indicates the Complete will be handled by the User Callback as in `ProcessMessagesAsync` below.
-                AutoComplete = false
+                AutoComplete = true
             };
 
             // Register the function that will process messages
@@ -63,6 +63,8 @@ namespace Members.API
                     member.Active = true;
 
                     context.Members.Add(member);
+
+                    _logger.LogInformation($"Adding member {member.Name}.");
                 }
                 else
                 {
@@ -70,14 +72,20 @@ namespace Members.API
                     entity.Email = member.Email;
                     entity.Name = member.Name;                    
                     entity.Rank = member.Rank;
+
+                    _logger.LogInformation($"Updating member {member.Name}.");
                 }
 
                 await context.SaveChangesAsync();
             }
 
+            _logger.LogInformation($"Member {member.Name} saved.");
+
+
             // Complete the message so that it is not received again.
             // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
-            await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+            //await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+            //await queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
             // Note: Use the cancellationToken passed as necessary to determine if the queueClient has already been closed.
             // If queueClient has already been Closed, you may chose to not call CompleteAsync() or AbandonAsync() etc. calls 

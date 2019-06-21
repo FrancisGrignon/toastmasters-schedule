@@ -44,6 +44,7 @@ namespace Members.API
 
         public static IWebHost CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights()
                 .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .UseSerilog()

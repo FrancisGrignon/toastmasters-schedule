@@ -21,6 +21,10 @@ namespace Members.DataAccess.Persistence.EntityConfiguration
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            builder.Property<bool>(ci => ci.Deleted)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             builder.Property<string>(ci => ci.Name)
                 .IsRequired()
                 .HasMaxLength(255);

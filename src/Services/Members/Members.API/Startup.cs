@@ -32,17 +32,17 @@ namespace Members.API
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
 
-            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            {
-                services.AddSingleton<IBus>(sp =>
-                {
-                    var logger = sp.GetRequiredService<ILogger<Bus>>();
-                    var serviceBusConnectionString = Configuration.GetConnectionString("ServiceBus");
-                    var queueName = Configuration.GetValue<string>("QueueName");
+            //if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
+            //{
+            //    services.AddSingleton<IBus>(sp =>
+            //    {
+            //        var logger = sp.GetRequiredService<ILogger<Bus>>();
+            //        var serviceBusConnectionString = Configuration.GetConnectionString("ServiceBus");
+            //        var queueName = Configuration.GetValue<string>("QueueName");
 
-                    return new Bus(serviceBusConnectionString, queueName, logger);
-                });
-            }
+            //        return new Bus(serviceBusConnectionString, queueName, logger);
+            //    });
+            //}
 
             services.AddTransient<IApiKeysService, ApiKeysService>();
 

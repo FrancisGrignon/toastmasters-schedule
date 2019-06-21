@@ -5,9 +5,12 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <UserSecretsId>85da22cd-dfe3-4179-9738-c1b8d09e38c5</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/72da88f3-28ff-4d22-b0fb-f77172a2170a/resourcegroups/Toastmasters/providers/microsoft.insights/components/tm-reminder</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/72da88f3-28ff-4d22-b0fb-f77172a2170a/resourcegroups/Toastmasters/providers/microsoft.insights/components/tm-reminder</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.4.0" />
@@ -36,6 +39,10 @@
     <None Update="Logs\READMD.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

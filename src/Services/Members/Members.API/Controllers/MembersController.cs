@@ -23,9 +23,21 @@ namespace Members.API.Controllers
         // GET: api/Members
         //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
+        public async Task<ActionResult<IEnumerable<Member>>> GetMembers(string email, int? toastmastersId)
         {
-            return await _context.Members.Where(p => p.Active).ToListAsync();
+            var query = _context.Members.Where(p => false == p.Deleted);
+
+            if (null != toastmastersId)
+            {
+                query = query.Where(p => toastmastersId == p.ToastmastersId);
+            }
+
+            if (false == string.IsNullOrEmpty(email))
+            {
+                query = query.Where(p => email == p.Email);
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Members/5
@@ -49,7 +61,7 @@ namespace Members.API.Controllers
         {
             var email = form["email"];
 
-            var exists = await _context.Members.Where(p => p.Email == email).AnyAsync();
+            var exists = await _context.Members.Where(p => email == p.Email).AnyAsync();
 
             if (exists)
             {
@@ -112,7 +124,8 @@ namespace Members.API.Controllers
                 return NotFound();
             }
 
-            _context.Members.Remove(member);
+            member.Deleted = true;
+
             await _context.SaveChangesAsync();
 
             return member;

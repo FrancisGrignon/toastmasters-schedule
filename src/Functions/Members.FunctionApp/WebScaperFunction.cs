@@ -1,16 +1,14 @@
 using HtmlAgilityPack;
-using Microsoft.Azure.ServiceBus;
+using Members.FunctionApp.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using TinyCsvParser;
 
@@ -20,12 +18,13 @@ namespace Members.FunctionApp
     {
         private static readonly Uri baseAddress = new Uri("https://www.toastmasters.org");
         private static IConfigurationRoot configuration;
-        private static IQueueClient queueClient;
+        private static MemberClient memberClient;
 
         private static ILogger Log { get; set; }
 
         [FunctionName("WebScaper")]
-        public static async Task Run([TimerTrigger("0 0 0 * * *")]TimerInfo myTimer, ILogger log)
+        //public static async Task Run([TimerTrigger("0 0 0 * * *")]TimerInfo myTimer, ILogger log)
+        public static async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
         {
             Log = log;
 
@@ -37,19 +36,16 @@ namespace Members.FunctionApp
 
             configuration = builder.Build();
 
-            var connectionString = configuration.GetConnectionString("ServiceBus");
-            var queueName = configuration["QueueName"];
-
-            queueClient = new QueueClient(connectionString, queueName);
+            memberClient = new MemberClient(configuration, log);
 
             try
             {
                 var csv = await Download();
-                var members = Parse(csv);
+                var rows = Parse(csv);
 
-                foreach (var member in members)
+                foreach (var row in rows)
                 {
-                    await SendMessagesAsync(member);
+                    await SendMessagesAsync(row);
                 }
             }
             catch (Exception ex)
@@ -60,21 +56,21 @@ namespace Members.FunctionApp
             Log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         }
         
-        public static List<Member> Parse(string csv)
+        public static List<CsvMemberRow> Parse(string csv)
         {
             Log.LogInformation("Parsing members from CSV");
 
             CsvParserOptions csvParserOptions = new CsvParserOptions(true, ',');
             CsvReaderOptions csvReaderOptions = new CsvReaderOptions(new[] { Environment.NewLine });
             CsvMemberMapping csvMapper = new CsvMemberMapping();
-            CsvParser<Member> csvParser = new CsvParser<Member>(csvParserOptions, csvMapper);
+            CsvParser<CsvMemberRow> csvParser = new CsvParser<CsvMemberRow>(csvParserOptions, csvMapper);
 
             var results = csvParser
                 .ReadFromString(csvReaderOptions, csv)
                 .ToList();
 
-            var members = new List<Member>();
-            Member member;
+            var members = new List<CsvMemberRow>();
+            CsvMemberRow member;
             string[] tab;
 
             foreach (var result in results)
@@ -199,17 +195,60 @@ namespace Members.FunctionApp
             }
         }
 
-        private static async Task SendMessagesAsync(Member member)
+        private static async Task SendMessagesAsync(CsvMemberRow row)
         {
-            // Create a new message to send to the queue
-            string messageBody = JsonConvert.SerializeObject(member, Formatting.Indented);
-            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+            Member member;
 
-            // Write the body of the message to the console
-            Log.LogInformation($"Sending message: {messageBody}");
+            var members = await memberClient.GetByToastmastersId(row.ToastmastersId);
 
-            // Send the message to the queue
-            await queueClient.SendAsync(message);
+            if (null == members || 0 == members.Count)
+            {
+                members = await memberClient.GetByEmail(row.Email);
+
+                if (null == members || 0 == members.Count)
+                {
+                    member = new Member
+                    {
+                        Active = true,
+                        Email = row.Email,
+                        Name = row.Name,
+                        Rank = row.Rank,
+                        ToastmastersId = row.ToastmastersId
+                    };
+                }
+                else
+                {
+                    member = members[0];
+                }
+            }
+            else
+            {
+                member = members[0];
+            }
+
+            HttpResponseMessage response;
+
+            if (0 == member.Id)
+            {
+                Log.LogInformation($"Adding {member.Name}");
+
+                response = await memberClient.Create(member);
+            }
+            else
+            {
+                Log.LogInformation($"Updating {member.Name}");
+
+                response = await memberClient.Update(member);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                Log.LogInformation($"Saved {member.Name}");
+            }
+            else
+            {
+                Log.LogInformation($"Failed to save {member.Name} dues to {response.StatusCode} - {response.RequestMessage}.");
+            }
         }
     }
 }

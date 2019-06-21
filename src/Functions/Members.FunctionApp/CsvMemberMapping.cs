@@ -2,7 +2,7 @@
 
 namespace Members.FunctionApp
 {
-    public class CsvMemberMapping : CsvMapping<Member>
+    public class CsvMemberMapping : CsvMapping<CsvMemberRow>
     {
         //  0. Customer ID
         //  1. Name
