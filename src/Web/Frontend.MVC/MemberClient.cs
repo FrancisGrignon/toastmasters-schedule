@@ -48,5 +48,29 @@ namespace Frontend.MVC
                 })
                 .ReceiveJson<bool>();
         }
+
+        public async Task<HttpResponseMessage> Create(Member member)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"members")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PostJsonAsync(member);
+        }
+
+        public async Task<HttpResponseMessage> Delete(Member member)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"members/{member.Id}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .DeleteAsync();
+        }
+
+        public async Task<HttpResponseMessage> Update(Member member)
+        {
+            return await _baseUrl
+                .AppendPathSegment($"members/{member.Id}")
+                .WithHeader(API_KEY_HEADER_NAME, _apiKey)
+                .PutJsonAsync(member);
+        }
     }
 }
