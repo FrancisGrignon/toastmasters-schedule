@@ -37,7 +37,7 @@ namespace Members.API.Controllers
                 query = query.Where(p => email == p.Email);
             }
 
-            return await query.ToListAsync();
+            return await query.OrderBy(p => p.Name).ToListAsync();
         }
 
         // GET: api/Members/5

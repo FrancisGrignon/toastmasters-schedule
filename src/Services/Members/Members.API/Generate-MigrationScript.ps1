@@ -1,1 +1,0 @@
-﻿dotnet ef migrations script --output ../Members.sql --context MemberContext --idempotent

@@ -5,7 +5,7 @@ Veuillez consulter le calendrier ci-dessous pour la rencontre de la semaine proc
 Y a-t-il des volontaires* pour :
 
 ###roles###
-* Veuillez RÉPONDRE À TOUS (« reply all ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
+* Veuillez RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
 
 ###calendar###
 
@@ -15,8 +15,8 @@ Les rencontres ont lieu de 12h-13h les mardis dans la salle SC-1206 (immeuble Pr
             
 Pour la rencontre, il est de votre responsabilité d’apporter :
             
-- Votre copie de l’ordre du jour.</li>
-- Votre manuel « Devenir un leader » et votre manuel « Savoir communiquer », OU vos feuilles imprimées d’évaluation de projet Pathways le cas échéant.</li>
+- Votre copie de l’ordre du jour.
+- Votre manuel « Devenir un leader » et votre manuel « Savoir communiquer », OU vos feuilles imprimées d’évaluation de projet Pathways le cas échéant.
 
 À bientôt!
 
@@ -26,3 +26,6 @@ Francis Grignon
 francis.grignon@canada.ca
 
 613.513.7165
+
+
+https://orateurs.azurewebsites.net

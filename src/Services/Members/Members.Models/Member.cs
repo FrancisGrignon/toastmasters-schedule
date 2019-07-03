@@ -17,5 +17,7 @@
         public string Rank { get; set; }
 
         public bool Deleted { get; set; }
+
+        public string Alias { get; set; }
     }
 }

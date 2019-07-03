@@ -31,19 +31,7 @@ namespace Members.API
             var connection = Configuration.GetConnectionString("Database");
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
-
-            //if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            //{
-            //    services.AddSingleton<IBus>(sp =>
-            //    {
-            //        var logger = sp.GetRequiredService<ILogger<Bus>>();
-            //        var serviceBusConnectionString = Configuration.GetConnectionString("ServiceBus");
-            //        var queueName = Configuration.GetValue<string>("QueueName");
-
-            //        return new Bus(serviceBusConnectionString, queueName, logger);
-            //    });
-            //}
-
+            
             services.AddTransient<IApiKeysService, ApiKeysService>();
 
             services
@@ -110,8 +98,7 @@ namespace Members.API
 
             return services;
         }
-
-
+        
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>

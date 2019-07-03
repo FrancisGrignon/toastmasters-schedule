@@ -70,8 +70,6 @@ namespace Reminders.FunctionApp
                     Log.LogInformation($"Sending email to {member.Name}");
 
                     SendEmail(client, member, subject, htmlBody, textBody, meetings[0].Id);
-
-                    return 0;
                 }
 
                 client.Disconnect(true);
@@ -275,7 +273,7 @@ namespace Reminders.FunctionApp
             };
 
             MailboxAddress from = new MailboxAddress(config["SenderName"], config["SenderEmail"]);
-            MailboxAddress to = new MailboxAddress(member.Name, "FR@ncis.ca");
+            MailboxAddress to = new MailboxAddress(member.Name, member.Email);
 
             var header = new Header("x-meeting-id", meetingId.ToString());
 
