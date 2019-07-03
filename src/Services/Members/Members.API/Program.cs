@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore;
+﻿using Members.API.Extensions;
+using Members.DataAccess;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -23,6 +25,8 @@ namespace Members.API
                 Log.Information("Configuring web host ({ApplicationContext})...", AppName);
 
                 var host = CreateWebHostBuilder(args, configuration);
+
+                host.MigrateDbContext<MemberContext>();
 
                 Log.Information("Starting web host");
 

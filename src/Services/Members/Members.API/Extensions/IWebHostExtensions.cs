@@ -10,14 +10,12 @@ namespace Members.API.Extensions
 {
     public static class IWebHostExtensions
     {
-        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+        public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost) where TContext : DbContext
         {
             using (var scope = webHost.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-
                 var logger = services.GetRequiredService<ILogger<TContext>>();
-
                 var context = services.GetService<TContext>();
 
                 try
@@ -36,7 +34,7 @@ namespace Members.API.Extensions
                     // migration can't fail for network related exception. The retry options for DbContext only 
                     // apply to transient exceptions
                     // Note that this is NOT applied when running some orchestrators (let the orchestrator to recreate the failing service)
-                    retry.Execute(() => InvokeSeeder(seeder, context, services));
+                    retry.Execute(() => context.Database.Migrate());
 
                     logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(TContext).Name);
                 }
@@ -47,14 +45,6 @@ namespace Members.API.Extensions
             }
 
             return webHost;
-        }
-
-        private static void InvokeSeeder<TContext>(Action<TContext, IServiceProvider> seeder, TContext context, IServiceProvider services)
-            where TContext : DbContext
-        {
-            context.Database.Migrate();
-
-            seeder(context, services);
         }
     }
 }
