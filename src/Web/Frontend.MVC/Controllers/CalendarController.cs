@@ -122,7 +122,7 @@ namespace Frontend.MVC.Controllers
 
             var members = await memberClient.GetAll();
 
-            model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }).ToList();
+            model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Alias }).ToList();
 
             return View(model);
         }
@@ -159,7 +159,7 @@ namespace Frontend.MVC.Controllers
                     }
 
                     attendee.Member.Id = member.Id;
-                    attendee.Member.Name = member.Name;
+                    attendee.Member.Name = member.Alias;
 
                     var response = await meetingClient.UpdateAttendee(id, attendee);
 
@@ -204,7 +204,7 @@ namespace Frontend.MVC.Controllers
                 MeetingId = meeting.Id,
                 MeetingName = meeting.Name,
                 RoleName = attendee.Role.Name,
-                MemberName = attendee.Member.Name,
+                MemberName = attendee.Member.Alias,
             };
 
             return View(model);

@@ -83,7 +83,7 @@ namespace Reminders.FunctionApp
             var path = Path.Combine(Context.FunctionAppDirectory, "templates\\email.html");
             var sb = new StringBuilder(File.ReadAllText(path));
 
-            sb.Replace("###name###", member.Name);
+            sb.Replace("###name###", member.Alias);
             sb.Replace("###date###", meetings[0].Date.ToString("yyyy-MM-dd"));
             sb.Replace("###theme###", meetings[0].Name);
 
@@ -144,7 +144,7 @@ namespace Reminders.FunctionApp
             var path = Path.Combine(Context.FunctionAppDirectory, "templates\\email.txt");
             var sb = new StringBuilder(File.ReadAllText(path));
 
-            sb.Replace("###name###", member.Name);
+            sb.Replace("###name###", member.Alias);
             sb.Replace("###date###", meetings[0].Date.ToString("yyyy-MM-dd"));
             sb.Replace("###theme###", meetings[0].Name);
 

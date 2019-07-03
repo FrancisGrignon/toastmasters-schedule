@@ -22,5 +22,8 @@ namespace Frontend.MVC.Models
         public string Rank { get; set; }
 
         public bool Deleted { get; set; }
+
+        [Required]
+        public string Alias { get; set; }
     }
 }

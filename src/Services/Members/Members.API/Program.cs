@@ -26,7 +26,7 @@ namespace Members.API
 
                 var host = CreateWebHostBuilder(args, configuration);
 
-                host.MigrateDbContext<MemberContext>();
+                // host.MigrateDbContext<MemberContext>();
 
                 Log.Information("Starting web host");
 

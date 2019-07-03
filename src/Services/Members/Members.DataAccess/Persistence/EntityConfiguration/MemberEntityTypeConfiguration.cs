@@ -36,6 +36,10 @@ namespace Members.DataAccess.Persistence.EntityConfiguration
                 .IsRequired()
                 .HasMaxLength(255);
 
+            builder.Property<string>(ci => ci.Alias)
+                .IsRequired()
+                .HasMaxLength(255);
+
             builder.HasKey(ci => ci.Id);
         }
     }

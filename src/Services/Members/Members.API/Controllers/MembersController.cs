@@ -107,6 +107,11 @@ namespace Members.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember(Member member)
         {
+            if (string.IsNullOrEmpty(member.Alias))
+            {
+                member.Alias = member.Name;
+            }
+
             _context.Members.Add(member);
             await _context.SaveChangesAsync();
 
