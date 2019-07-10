@@ -111,3 +111,59 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710011001_TableMemberAddEmail2And3')
+BEGIN
+    ALTER TABLE [Members] ADD [Email2] nvarchar(255) NOT NULL DEFAULT N'';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710011001_TableMemberAddEmail2And3')
+BEGIN
+    ALTER TABLE [Members] ADD [Email3] nvarchar(255) NOT NULL DEFAULT N'';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710011001_TableMemberAddEmail2And3')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190710011001_TableMemberAddEmail2And3', N'2.2.4-servicing-10062');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710021601_TableMemberAddEmail2And3Nullable')
+BEGIN
+    DECLARE @var1 sysname;
+    SELECT @var1 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Members]') AND [c].[name] = N'Email3');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Members] DROP CONSTRAINT [' + @var1 + '];');
+    ALTER TABLE [Members] ALTER COLUMN [Email3] nvarchar(255) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710021601_TableMemberAddEmail2And3Nullable')
+BEGIN
+    DECLARE @var2 sysname;
+    SELECT @var2 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Members]') AND [c].[name] = N'Email2');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Members] DROP CONSTRAINT [' + @var2 + '];');
+    ALTER TABLE [Members] ALTER COLUMN [Email2] nvarchar(255) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710021601_TableMemberAddEmail2And3Nullable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190710021601_TableMemberAddEmail2And3Nullable', N'2.2.4-servicing-10062');
+END;
+
+GO
+

@@ -36,6 +36,12 @@ namespace Members.DataAccess.Persistence.EntityConfiguration
                 .IsRequired()
                 .HasMaxLength(255);
 
+            builder.Property<string>(ci => ci.Email2)
+                .HasMaxLength(255);
+
+            builder.Property<string>(ci => ci.Email3)
+                .HasMaxLength(255);
+
             builder.Property<string>(ci => ci.Alias)
                 .IsRequired()
                 .HasMaxLength(255);

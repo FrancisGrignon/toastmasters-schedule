@@ -3,6 +3,7 @@ using Members.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,14 +75,40 @@ namespace Members.API.Controllers
         // PUT: api/Members/5
         //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMember(int id, Member member)
+        public async Task<IActionResult> PutMember(int id, Member model)
         {
-            if (id != member.Id)
+            if (id != model.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(member).State = EntityState.Modified;
+            var member = await _context.Members.FindAsync(id);
+
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            member.Active = model.Active;
+
+            if (string.IsNullOrEmpty(model.Alias))
+            {
+                if (string.IsNullOrEmpty(member.Alias))
+                {
+                    member.Alias = model.Name.Substring(0, model.Name.IndexOf(' '));
+                }
+            }
+            else
+            {
+                member.Alias = model.Alias;
+            }
+
+            member.Email = model.Email;
+            member.Email2 = model.Email2;
+            member.Name = model.Name;
+            member.Note = model.Note;
+            member.Rank = model.Rank;
+            member.ToastmastersId = model.ToastmastersId;
 
             try
             {
@@ -109,7 +136,7 @@ namespace Members.API.Controllers
         {
             if (string.IsNullOrEmpty(member.Alias))
             {
-                member.Alias = member.Name;
+                member.Alias = member.Name.Substring(0, member.Name.IndexOf(' '));
             }
 
             _context.Members.Add(member);

@@ -88,7 +88,7 @@ namespace Members.FunctionApp
 
                     members.Add(member);
 
-                    Log.LogInformation($"{member.ToastmastersId} | {member.Name} | {member.Rank} | {member.Email}");
+                    Log.LogInformation($"{member.ToastmastersId} | {member.Name} | {member.Rank} | {member.Email} | {member.Email2}");
                 }
                 else
                 {
@@ -207,14 +207,7 @@ namespace Members.FunctionApp
 
                 if (null == members || 0 == members.Count)
                 {
-                    member = new Member
-                    {
-                        Active = true,
-                        Email = row.Email,
-                        Name = row.Name,
-                        Rank = row.Rank,
-                        ToastmastersId = row.ToastmastersId
-                    };
+                    member = new Member();
                 }
                 else
                 {
@@ -225,6 +218,13 @@ namespace Members.FunctionApp
             {
                 member = members[0];
             }
+
+            member.Active = true;
+            member.Email = row.Email;
+            member.Email2 = row.Email2;
+            member.Name = row.Name;
+            member.Rank = row.Rank;
+            member.ToastmastersId = row.ToastmastersId;
 
             HttpResponseMessage response;
 

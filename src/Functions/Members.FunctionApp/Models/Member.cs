@@ -15,5 +15,7 @@
         public int ToastmastersId { get; set; }
 
         public string Rank { get; set; }
+
+        public string Email2 { get; set; }
     }
 }

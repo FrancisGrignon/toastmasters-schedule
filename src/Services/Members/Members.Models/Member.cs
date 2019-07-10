@@ -19,5 +19,9 @@
         public bool Deleted { get; set; }
 
         public string Alias { get; set; }
+
+        public string Email2 { get; set; }
+
+        public string Email3 { get; set; }
     }
 }

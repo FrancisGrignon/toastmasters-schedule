@@ -5,7 +5,7 @@ Veuillez consulter le calendrier ci-dessous pour la rencontre de la semaine proc
 Y a-t-il des volontaires* pour :
 
 ###roles###
-* Veuillez RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
+* Veuillez accéder au site https://orateurs.azurewebsites.net ou RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
 
 ###calendar###
 
@@ -22,10 +22,10 @@ Pour la rencontre, il est de votre responsabilité d’apporter :
 
 Cordialement,
 
-Francis Grignon
+Francis Grignon CC EC4
 francis.grignon@canada.ca
 
 613.513.7165
 
-
+Les Orateurs de Statistique Canada
 https://orateurs.azurewebsites.net

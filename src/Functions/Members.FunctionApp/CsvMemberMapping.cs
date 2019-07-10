@@ -33,6 +33,7 @@ namespace Members.FunctionApp
             MapProperty(0, x => x.ToastmastersId);
             MapProperty(1, x => x.Name);
             MapProperty(10, x => x.Email);
+            MapProperty(11, x => x.Email2);
         }
     }
 }
