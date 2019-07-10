@@ -25,5 +25,7 @@ namespace Frontend.MVC.Models
 
         [Required]
         public string Alias { get; set; }
+
+        public string Email2 { get; set; }
     }
 }
