@@ -11,6 +11,7 @@ namespace Frontend.MVC.Models
         public string Name { get; set; }
 
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         public string Note { get; set; }
@@ -26,6 +27,7 @@ namespace Frontend.MVC.Models
         [Required]
         public string Alias { get; set; }
 
+        [EmailAddress]
         public string Email2 { get; set; }
     }
 }
