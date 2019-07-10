@@ -281,6 +281,11 @@ namespace Reminders.FunctionApp
             message.From.Add(from);
             message.To.Add(to);
 
+            if (false == string.IsNullOrEmpty(member.Email2))
+            {
+                message.To.Add(new MailboxAddress(member.Name, member.Email2));
+            }
+
             client.Send(message);
         }
     }
