@@ -5,9 +5,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Flurl" Version="2.8.2" />
-    <PackageReference Include="MailKit" Version="2.1.5.1" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.28" />
-    <PackageReference Include="NUglify" Version="1.5.12" />
+    <PackageReference Include="MailKit" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
+    <PackageReference Include="NUglify" Version="1.5.13" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
