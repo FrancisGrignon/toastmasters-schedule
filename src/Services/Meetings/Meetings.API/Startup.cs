@@ -1,4 +1,5 @@
-﻿using Meetings.API.Helpers;
+﻿using Meetings.API.Extensions;
+using Meetings.API.Helpers;
 using Meetings.API.Infrastructure.Core.Repositories;
 using Meetings.API.Infrastructure.Persistence.Repositories;
 using Meetings.API.Services;
@@ -63,6 +64,7 @@ namespace Meetings.API
                 c.RoutePrefix = string.Empty;
             });
 
+            app.ConfigureExceptionHandler();
             app.ApplyApiKeyValidation();
             app.UseHttpsRedirection();
             app.UseMvc();

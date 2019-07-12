@@ -1,4 +1,5 @@
-﻿using Members.API.Helpers;
+﻿using Members.API.Extensions;
+using Members.API.Helpers;
 using Members.API.Services;
 using Members.DataAccess;
 using Microsoft.AspNetCore.Builder;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 
@@ -65,11 +66,9 @@ namespace Members.API
 
             app.ApplyApiKeyValidation();
 
+            app.ConfigureExceptionHandler();
             app.UseHttpsRedirection();
             app.UseMvc();
-
-            // Warn up the bus
-            app.ApplicationServices.GetService<IBus>();
         }
     }
 
