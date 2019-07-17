@@ -1,0 +1,207 @@
+﻿@model Frontend.MVC.Models.Meeting
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+@{Attendee animator = Model.Attendees.Where(p => p.Role.Id == 1).SingleOrDefault();}
+
+<div>
+    <dl class="row">
+        <dd class="col-sm-6">
+            @Html.DisplayNameFor(model => model.Date) : @Html.DisplayFor(model => model.Date)<br />
+            @Html.DisplayNameFor(model => model.Name) : @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dd class="col-sm-6 text-right">
+            No du Club : 946842<br />
+            District 61
+        </dd>
+    </dl>
+    <dl class="row">
+        <dd class="col-sm-4">
+            Les Orateurs de Statistique Canada<br />
+            Salle 1206, Immeuble Principal<br />
+            <br />
+            Mardi de midi à 13 h<br />
+        </dd>
+        <dd class="col-sm-4 justify-content-center">
+            <img src="~/img/logo.gif" alt="Toastmasters logos" width="189" height="157" />
+        </dd>
+        <dd class="col-sm-4 text-right">
+            VP Formation : Francis Grignon<br />
+            613-513-7165
+        </dd>
+    </dl>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Heure
+                </th>
+                <th>
+                    Rôle ou tâche
+                </th>
+                <th>
+                    Membre
+                </th>
+                <th>
+                    Durée
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="7">12:05</td>
+                <td>1 – OUVERTURE DE LA RENCONTRE</td>
+                <td>@(null == animator.Member ? animator.Role.Name : animator.Member.Name)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Révision de l’ordre du jour (vérifier présences et rôles à combler ET présenter les invités, s’il y a lieu)</td>
+                <td>{animateur}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Présentation de l’équipe d’évaluateurs et explication des rôles (s’il y a des invités)</td>
+                <td>{évaluateur général}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Introduction du thème</td>
+                <td>{animateur}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Mot du jour</td>
+                <td>{mot du jour}</td>
+                <td>1 min</td>
+            </tr>
+            <tr>
+                <td>Toast</td>
+                <td>{toast}</td>
+                <td>1 min</td>
+            </tr>
+            <tr>
+                <td>Farce/Anecdote</td>
+                <td>{farce}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td rowspan="5">12:15</td>
+                <td>
+                    2 – SUJETS IMPROVISÉS
+                    Dirigés par le meneur/la meneuse des sujets improvisés
+                </td>
+                <td>{tabletopics}</td>
+                <td>[15 min]*</td>
+            </tr>
+            <tr>
+                <td rowspan="4">
+                    Introduction (3 min) et conclusion (2 min)
+                    et 4 questions de 2 min chacune
+                </td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td rowspan="3">12:30</td>
+                <td>
+                    3 – DISCOURS PRÉPARÉ  ou SÉANCE ÉDUCATIVE
+                    Dirigé par l’animateur/animatrice de la rencontre
+                </td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Orateur(trice)</td>
+                <td>{orateur}</td>
+                <td>7 min</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Manuel, no du projet :
+                    Titre :  «  »
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td rowspan="7">12:40</td>
+                <td>
+                    4 – RAPPORTS ET ÉVALUATIONS
+                    Dirigés par l’évaluateur général/évaluatrice générale
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Évaluateur(trice) des improvisations (si aucun discours)</td>
+                <td>{évaluateur}</td>
+                <td>3 min</td>
+            </tr>
+            <tr>
+                <td>Évaluateur(trice) du discours</td>
+                <td>{évaluateur}</td>
+                <td>3 min</td>
+            </tr>
+            <tr>
+                <td>Grammairien(ne)/Compteur(euse) d’hésitations</td>
+                <td>{grammairien}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Écouteur(euse)</td>
+                <td>{écouteur}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Chronométreur(euse)</td>
+                <td>{chronometeur}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Conclusion de l’évaluateur(trice) général(e)</td>
+                <td>{évaluateur général}</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td rowspan="3">12:52</td>
+                <td>
+                    5 – CLÔTURE
+                    Dirigée par l’animateur/animatrice de la rencontre
+                </td>
+                <td>{animateur}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">Prochain ordre du jour… @@ faire circuler durant la rencontre</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">Commentaires des invité(e)s, annonces, vote des sujets improvisés…</td>
+                <td>3 min</td>
+            </tr>
+            <tr>
+                <td>12:55</td>
+                <td colspan="3">Clôture de la rencontre</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>@Html.DisplayFor(model => model.Note)</p>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
