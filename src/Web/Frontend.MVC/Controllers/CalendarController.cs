@@ -89,6 +89,77 @@ namespace Frontend.MVC.Controllers
             return View(calendar);
         }
 
+
+        // GET: Calendar
+        [Route("[controller]/print")]
+        public async Task<ActionResult> Print()
+        {
+            var client = new MeetingClient(_config);
+
+            var meetings = await client.GetPlanning();
+
+            var x = meetings.Count + 1;
+            var y = meetings[0].Attendees.Count() + 2;
+            var calendar = new Calendar(x, y);
+
+            // Add roles
+            int m = meetings[0].Attendees.Count();
+
+            calendar[0, 0] = new CalendarCell { AttendeeId = 0, Value = string.Empty };
+            calendar[0, 1] = new CalendarCell { AttendeeId = 0, Value = string.Empty };
+
+            int k = 0;
+
+            foreach (var attendee in meetings[0].Attendees)
+            {
+                calendar[0, k + 2] = new CalendarCell { AttendeeId = 0, Value = attendee.Role.Name };
+
+                k++;
+            }
+
+            int i = 0, j = 0;
+            string value;
+
+            CalendarCell cell;
+
+            foreach (var meeting in meetings)
+            {
+                i++;
+                j = 0;
+
+                // Add Date
+                value = meeting.Date.ToLocalTime().ToString("yyyy-MM-dd");
+                calendar[i, 0] = new CalendarCell { MeetingId = meeting.Id, AttendeeId = 0, Value = value };
+
+                // Add subject
+                calendar[i, 1] = new CalendarCell { MeetingId = meeting.Id, AttendeeId = 0, Value = meeting.Name };
+
+                j = 2;
+
+                // Add member
+                foreach (var attendee in meeting.Attendees)
+                {
+                    value = attendee.Member?.Name ?? string.Empty;
+                    cell = new CalendarCell { MeetingId = meeting.Id, AttendeeId = attendee.Id, Value = value };
+
+                    if (null == attendee.Member)
+                    {
+                        cell.CanAccept = true;
+                    }
+                    else
+                    {
+                        cell.CanRefuse = true;
+                    }
+
+                    calendar[i, j] = cell;
+
+                    j++;
+                }
+            }
+
+            return View(calendar);
+        }
+
         public async Task<ActionResult> Accept(int id, int attendeeId)
         {
             var client = new MeetingClient(_config);
