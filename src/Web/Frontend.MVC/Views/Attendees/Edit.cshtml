@@ -1,0 +1,41 @@
+﻿@model Frontend.MVC.Models.AttendeeViewModel
+
+@{
+    ViewData["Title"] = "Modifier un participant";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="RoleId" type="hidden" />
+            <input asp-for="MeetingId" type="hidden" />
+
+            Role : @Html.DisplayFor(model => model.RoleName)<br />
+
+            <div class="form-group">
+                Membre : 
+                <select asp-for="MemberId" asp-items="Model.Members">
+                    <option value="" selected>--- Non assigné ---</option>
+                </select>
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-controller="Meetings" asp-route-id="@Model.MeetingId">Retour à la rencontre</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

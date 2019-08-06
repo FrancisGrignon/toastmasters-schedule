@@ -1,54 +1,113 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Frontend.MVC.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
+using NToastNotify;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.MVC.Controllers
 {
+    [Route("meetings/{meetingId:int}/attendees")]
+    [ApiController]
     public class AttendeesController : Controller
     {
-        // POST: Attendees/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+        private readonly IConfiguration _config;
+        private readonly IToastNotification _toastNotification;
 
-                //return RedirectToAction(nameof(Index));
-                return NotFound();
-            }
-            catch
-            {
-                return View();
-            }
+        public AttendeesController(IConfiguration config, IToastNotification toastNotification)
+        {
+            _config = config;
+            _toastNotification = toastNotification;
         }
 
         // GET: Attendees/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet("{attendeeId}")]
+        public async Task<ActionResult> Edit(int meetingId, int attendeeId)
         {
-            return View();
+            var client = new MeetingClient(_config);
+            var attendee = await client.GetAttendee(meetingId, attendeeId);
+
+            if (null == attendee)
+            {
+                return NotFound();
+            }
+
+            var model = new AttendeeViewModel
+            {
+                Id = attendeeId,
+                MeetingId = meetingId,
+                RoleId = attendee.Role.Id,
+                RoleName = attendee.Role.Name
+            };
+
+            if (null == attendee.Member)
+            {
+                model.MemberId = 0;
+            }
+            else
+            {
+                model.MemberId = attendee.Member.Id;
+            }
+
+            var memberClient = new MemberClient(_config);
+            var members = await memberClient.GetAll();
+
+            model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Alias }).ToList();
+
+            return View(model);
         }
 
         // POST: Attendees/Edit/5
-        [HttpPost]
+        [HttpPost("{attendeeId}")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int meetingId, int attendeeId, [FromForm]AttendeeViewModel model)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var memberClient = new MemberClient(_config);
+            var members = await memberClient.GetAll();
 
-                //return RedirectToAction(nameof(Index));
-                return NotFound();
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    var client = new MeetingClient(_config);
+
+                    var attendee = await client.GetAttendee(meetingId, attendeeId);
+
+                    if (null == attendee)
+                    {
+                        return NotFound();
+                    }
+
+                    if (null == model.MemberId)
+                    {
+                        attendee.Member = null;
+                    }
+                    else
+                    {
+                        attendee.Member = await memberClient.Get(model.MemberId.Value);
+                    }
+
+                    var response = await client.UpdateAttendee(meetingId, attendee);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        _toastNotification.AddSuccessToastMessage($"Le participant a été modifiée.");
+
+                        return RedirectToAction("Details", "Meetings", new { Id = meetingId });
+                    }
+                }
+                catch
+                {
+                    model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Alias }).ToList();
+
+                    return View(model);
+                }
             }
+
+            model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Alias }).ToList();
+
+            return View(model);
         }        
     }
 }

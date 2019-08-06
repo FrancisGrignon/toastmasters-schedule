@@ -22,9 +22,11 @@ namespace Frontend.MVC.Controllers
             _toastNotification = toastNotification;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string returnUrl = null)
         {
             var model = new LoginViewModel();
+
+            model.ReturnUrl = returnUrl;
 
             return View(model);
         }
@@ -42,7 +44,12 @@ namespace Frontend.MVC.Controllers
                     {
                         await SignInUser(model.Username, true);
 
-                        return RedirectToAction(nameof(Index), "Home");
+                        if (string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            RedirectToAction("Index", "Calendar");
+                        }
+
+                        return Redirect(model.ReturnUrl);
                     }
                 }
                 catch (Exception ex)
