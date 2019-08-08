@@ -1,35 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Frontend.MVC.Models
 {
     public class AgendaViewModel
     {
+        public string Name { get; set; }
+
         public DateTime Date { get; set; }
 
+        public string Note { get; set; }
 
-    }
+        public string Toastmaster { get; set; }
 
-    public class Block
-    {
-        public DateTime Time { get; set; }
-        public string Title { get; set; }
-        public string Member { get; set; }
-        public int Duration { get; set; }
+        public string GeneralEvaluator { get; set; }
 
-        ICollection<Labor> Labors { get; set; }
-    }
+        public string WordOfTheDay { get; set; }
 
-    public class Labor
-    {
-        public string Member { get; set; }
+        public string Toast { get; set; }
 
-        public int Duration { get; set; }
+        public string Humour { get; set; }
 
-        public int Role { get; set; }
-        
-        public int Order { get; set; }
+        public string TopicsMaster { get; set; }
+
+        public string Speaker { get; set; }
+
+        public string Evaluator { get; set; }
+
+        public string Grammarian { get; set; }
+
+        public string Listener { get; set; }
+
+        public string Timer { get; set; }
     }
 }

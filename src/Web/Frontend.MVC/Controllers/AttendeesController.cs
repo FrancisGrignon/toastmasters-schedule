@@ -43,7 +43,7 @@ namespace Frontend.MVC.Controllers
 
             if (null == attendee.Member)
             {
-                model.MemberId = 0;
+                model.MemberId = null;
             }
             else
             {
@@ -78,7 +78,7 @@ namespace Frontend.MVC.Controllers
                     {
                         return NotFound();
                     }
-
+                    
                     if (null == model.MemberId)
                     {
                         attendee.Member = null;
@@ -86,6 +86,9 @@ namespace Frontend.MVC.Controllers
                     else
                     {
                         attendee.Member = await memberClient.Get(model.MemberId.Value);
+
+                        // Keep only the member alias
+                        attendee.Member.Name = attendee.Member.Alias;
                     }
 
                     var response = await client.UpdateAttendee(meetingId, attendee);

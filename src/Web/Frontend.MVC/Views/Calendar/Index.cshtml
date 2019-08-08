@@ -29,29 +29,38 @@
         <tbody>
             @for (int y = 2; y < Model.MaxY; y++)
             {
+                <tr>
+                    @for (int x = 0; x < Model.MaxX; x++)
+                    {
+                        <td>
+                            @if (Model[x, y].CanAccept)
+                            {
+                                @Html.ActionLink("[Accepter]", "Accept", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })
+                            }
+                            else if (Model[x, y].CanRefuse)
+                            {
+                                <span>@Model[x, y].Value</span> <span>@Html.ActionLink("[X]", "Refuse", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })</span>
+                            }
+                            else
+                            {
+                                <span>@Model[x, y].Value</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
             <tr>
-                @for (int x = 0; x < Model.MaxX; x++)
+                <td></td>
+                @for (int x = 1; x < Model.MaxX; x++)
                 {
-                <td>
-                    @if (Model[x, y].CanAccept)
-                    {
-                        @Html.ActionLink("[Accepter]", "Accept", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })
-                    }
-                    else if (Model[x, y].CanRefuse)
-                    {
-                    <span>@Model[x, y].Value</span> <span>@Html.ActionLink("[X]", "Refuse", new { id = Model[x, y].MeetingId, attendeeId = Model[x, y].AttendeeId })</span>
-                    }
-                    else
-                    {
-                        <span>@Model[x, y].Value</span>
-                    }
-                </td>
+                    <td>
+                        @Html.ActionLink("Ordre du jour", "Index", "Agenda", new { id = Model[x, 0].MeetingId })
+                    </td>
                 }
             </tr>
-            }
         </tbody>
     </table>
     
-    <p>@Html.ActionLink("Imprimer", "Print", null)</p>
+    <p>@Html.ActionLink("Imprimer le calendrier", "Print", null)</p>
 
 </div>
