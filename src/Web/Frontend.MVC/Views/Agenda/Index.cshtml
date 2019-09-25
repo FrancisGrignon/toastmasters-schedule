@@ -5,8 +5,8 @@
 }
 
 <div>
-    <dl class="row">
-        <dd class="col-sm-4">
+    <div class="row d-print-none">
+        <div class="col-sm-4">
             Salle 1206, Immeuble Principal<br />
             <br />
             Date : @Html.DisplayFor(model => model.Date)<br />
@@ -14,18 +14,28 @@
             <br />
             Mardi de midi à 13 h<br />
             <a href="https://orateurs.azurewebsites.net">orateurs.azurewebsites.net</a>
-        </dd>
-        <dd class="col-sm-4 justify-content-center">
+        </div>
+        <div class="col-sm-4 justify-content-center">
             <img src="~/images/logo.gif" alt="Toastmasters logos" width="189" height="157" />
-        </dd>
-        <dd class="col-sm-4 text-right">
+        </div>
+        <div class="col-sm-4 text-right">
             No du Club : 946842<br />
             District 61<br />
             <br />
             VP Formation : Francis Grignon<br />
             613-513-7165
-        </dd>
-    </dl>
+        </div>
+    </div>
+    
+    <div class="row d-none d-print-block">
+        <div class="col-sm">
+            Emplacement : Salle 1206, Immeuble Principal<br />
+            Date : @Html.DisplayFor(model => model.Date)<br />
+            Thème : @Html.DisplayFor(model => model.Name)<br />
+            Horaire: Mardi de midi à 13 h<br />
+            <br />
+        </div>
+    </div>
 
     <table class="table">
         <thead>
@@ -122,23 +132,15 @@
                 <td>@Html.DisplayFor(model => model.Toastmaster)</td>
                 <td>2 min</td>
             </tr>
-             <tr>
+            <tr>
                 <td>Orateur(trice)</td>
                 <td>@Html.DisplayFor(model => model.Speaker)</td>
                 <td>5-7 min</td>
             </tr>
-            @*<tr>
-            <td colspan="2">
-                Manuel, no du projet :
-                Titre :  «  »
-            </td>
-            <td></td>
-        </tr>*@
             <tr>
                 <td rowspan="6">12:40</td>
                 <td>
                     4 – RAPPORTS ET ÉVALUATIONS
-                    Dirigés par l’évaluateur général/évaluatrice générale
                 </td>
                 <td>@Html.DisplayFor(model => model.GeneralEvaluator)</td>
                 <td></td>
@@ -155,7 +157,7 @@
             </tr>
             <tr>
                 <td>Écouteur(euse)</td>
-                <td>@Html.DisplayFor(model => model.Evaluator)</td>
+                <td>@Html.DisplayFor(model => model.Listener)</td>
                 <td>2 min</td>
             </tr>
             <tr>
@@ -172,7 +174,6 @@
                 <td rowspan="3">12:52</td>
                 <td>
                     5 – CLÔTURE
-                    Dirigée par l’animateur/animatrice de la rencontre
                 </td>
                 <td>@Html.DisplayFor(model => model.Toastmaster)</td>
                 <td></td>

@@ -17,6 +17,7 @@ namespace Frontend.MVC.Models
         public string Note { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         public ICollection<Attendee> Attendees { get; set; }

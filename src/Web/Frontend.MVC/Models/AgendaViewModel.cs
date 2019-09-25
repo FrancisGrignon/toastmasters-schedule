@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.MVC.Models
 {
     public class AgendaViewModel
     {
         public string Name { get; set; }
-
+        
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         public string Note { get; set; }

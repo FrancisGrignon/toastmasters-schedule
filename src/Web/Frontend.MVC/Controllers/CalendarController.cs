@@ -1,8 +1,10 @@
 ﻿using Frontend.MVC.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using NToastNotify;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -187,12 +189,19 @@ namespace Frontend.MVC.Controllers
                 RoleName = attendee.Role.Name
             };
 
-            model.Members = new List<SelectListItem>();
-
             var memberClient = new MemberClient(_config);
 
             var members = await memberClient.GetAll();
 
+            var buffer = Request.Cookies["member"];
+            int memberId;
+
+            if (false == int.TryParse(buffer, out memberId))
+            {
+                memberId = 0;
+            }
+
+            model.MemberId = memberId;
             model.Members = members.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Alias }).ToList();
 
             return View(model);
@@ -237,6 +246,12 @@ namespace Frontend.MVC.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Merci, le role {attendee.Role.Name} a été assigné à {attendee.Member.Name}.");
+
+                        CookieOptions option = new CookieOptions();
+
+                        option.Expires = DateTime.Now.AddYears(1);
+
+                        Response.Cookies.Append("member", member.Id.ToString(), option);
 
                         return RedirectToAction(nameof(Index));
                     }
