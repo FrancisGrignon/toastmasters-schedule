@@ -1,17 +1,20 @@
 ﻿Bonjour ###name###,
 
-Veuillez consulter le calendrier ci-dessous pour la rencontre de la semaine prochaine (###date###) et VÉRIFIER SI VOUS AVEZ UN RÔLE*.
+La prochaine rencontre aura pour thème : « ###theme### ». Elle aura lieu ###date### dans la salle SC-1206 (immeuble Principal).
 
+Votre rôle sera le suivant :
+
+###memberroles###
 Y a-t-il des volontaires* pour :
 
-###roles###
+###emptyroles###
 * Veuillez accéder au site https://orateurs.azurewebsites.net ou RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
 
 ###calendar###
 
-Pour les employés de Statistique Canada, vous pouvez consulter le répertoire partagé (\\fld6filer\Toastmasters\Les Orateurs de Statcan\) pour trouver quelques documents de référence en anglais et en français, ainsi que l’ordre du jour et le calendrier des rencontres.
+Pour les employés de Statistique Canada, vous pouvez consulter le répertoire partagé (\\fld6filer\Toastmasters\Les Orateurs de Statcan\) pour trouver quelques documents de référence en anglais et en français.
 
-Les rencontres ont lieu de 12h-13h les mardis dans la salle SC-1206 (immeuble Principal). Les visiteurs sont toujours les bienvenus!
+Les visiteurs sont toujours les bienvenus!
             
 Pour la rencontre, il est de votre responsabilité d’apporter :
             

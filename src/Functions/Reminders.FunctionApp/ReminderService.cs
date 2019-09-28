@@ -1,4 +1,5 @@
 ﻿using MailKit.Net.Smtp;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
@@ -7,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
 
 namespace Reminders.FunctionApp
 {
@@ -84,12 +84,11 @@ namespace Reminders.FunctionApp
             var sb = new StringBuilder(File.ReadAllText(path));
 
             sb.Replace("###name###", member.Alias);
-            sb.Replace("###date###", meetings[0].Date.ToString("yyyy-MM-dd"));
+            sb.Replace("###date###", meetings[0].Date.ToString("dddd le dd MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("fr-CA")));
             sb.Replace("###theme###", meetings[0].Name);
 
             var buffer = new StringBuilder();
-
-            int count = 0;
+            var myRole = new StringBuilder();
 
             foreach (var attendee in meetings[0].Attendees)
             {
@@ -98,17 +97,31 @@ namespace Reminders.FunctionApp
                     buffer.AppendLine("<li>");
                     buffer.Append(attendee.Role.Name);
                     buffer.AppendLine("</li>");
-
-                    count++;
+                }
+                else if (member.Id == attendee.Member.Id)
+                {
+                    myRole.AppendLine("<li>");
+                    myRole.Append(attendee.Role.Name);
+                    myRole.AppendLine("</li>");
+                }
+                else
+                {
+                    // Ignore
                 }
             }
 
-            if (0 == count)
+            if (0 == buffer.Length)
             {
                 buffer.Append("Tous les rôles ont été comblés.");
             }
 
-            sb.Replace("###roles###", buffer.ToString());
+            if (0 == myRole.Length)
+            {
+                buffer.Append("Vous n'avez pas de rôle.");
+            }
+
+            sb.Replace("###emptyroles###", buffer.ToString());
+            sb.Replace("###myroles###", myRole.ToString());
 
             buffer.Length = 0;
 
@@ -145,11 +158,11 @@ namespace Reminders.FunctionApp
             var sb = new StringBuilder(File.ReadAllText(path));
 
             sb.Replace("###name###", member.Alias);
-            sb.Replace("###date###", meetings[0].Date.ToString("yyyy-MM-dd"));
+            sb.Replace("###date###", meetings[0].Date.ToString("dddd le d MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("fr-CA")));
             sb.Replace("###theme###", meetings[0].Name);
 
             var buffer = new StringBuilder();
-            var count = 0;
+            var myRole = new StringBuilder();
 
             foreach (var attendee in meetings[0].Attendees)
             {
@@ -157,18 +170,32 @@ namespace Reminders.FunctionApp
                 {
                     buffer.Append(" - ");
                     buffer.AppendLine(attendee.Role.Name);
-
-                    count++;
+                }
+                else if (member.Id == attendee.Member.Id)
+                {
+                    myRole.Append(" - ");
+                    myRole.AppendLine(attendee.Role.Name);
+                }
+                else
+                {
+                    // Ignore, someone else role
                 }
             }
 
-            if (0 == count)
+            if (0 == myRole.Length)
             {
-                buffer.Append("Tous les rôles ont été comblés.");
+                myRole.AppendLine("  Vous n'avez pas de rôles.");
             }
 
-            sb.Replace("###roles###", buffer.ToString());
+            sb.Replace("###memberroles###", myRole.ToString());
 
+            if (0 == buffer.Length)
+            {
+                buffer.AppendLine("  Tous les rôles ont été comblés.");
+            }
+
+            sb.Replace("###emptyroles###", buffer.ToString());
+                
             buffer.Length = 0;
 
             for (int column = 1; column < calendar.ColumnCount; column++)
