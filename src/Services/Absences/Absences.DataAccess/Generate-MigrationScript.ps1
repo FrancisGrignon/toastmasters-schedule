@@ -1,0 +1,1 @@
+﻿dotnet ef migrations script --output Absences.sql --context AbsencesContext --idempotent

@@ -3,7 +3,6 @@ using Members.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +21,6 @@ namespace Members.API.Controllers
         }
 
         // GET: api/Members
-        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetMembers(string email, int? toastmastersId)
         {
@@ -42,7 +40,6 @@ namespace Members.API.Controllers
         }
 
         // GET: api/Members/5
-        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Member>> GetMember(int id)
         {
@@ -73,7 +70,6 @@ namespace Members.API.Controllers
         }
 
         // PUT: api/Members/5
-        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMember(int id, Member model)
         {
@@ -105,6 +101,10 @@ namespace Members.API.Controllers
 
             member.Email = model.Email;
             member.Email2 = model.Email2;
+            member.Email3 = model.Email3;
+            member.Notify = model.Notify;
+            member.Notify2 = model.Notify2;
+            member.Notify3 = model.Notify3;
             member.Name = model.Name;
             member.Note = model.Note;
             member.Rank = model.Rank;
@@ -130,7 +130,6 @@ namespace Members.API.Controllers
         }
 
         // POST: api/Members
-        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember(Member member)
         {
@@ -146,7 +145,6 @@ namespace Members.API.Controllers
         }
 
         // DELETE: api/Members/5
-        //[Authorize(Policy = "ApiKeyPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Member>> DeleteMember(int id)
         {

@@ -34,7 +34,8 @@ namespace Reminders.FunctionApp
 
             Log.LogInformation("Reading members");
 
-            var members = await new MemberClient(Configuration).GetAll();
+            var memberClient = new MemberClient(Configuration);
+            var members = await memberClient.GetAll();
 
             string htmlBody = null, textBody;
 
@@ -299,21 +300,61 @@ namespace Reminders.FunctionApp
                 Body = bodyBuilder.ToMessageBody()
             };
 
-            MailboxAddress from = new MailboxAddress(config["SenderName"], config["SenderEmail"]);
-            MailboxAddress to = new MailboxAddress(member.Name, member.Email);
+            message.Headers.Add(new Header("x-meeting-id", meetingId.ToString()));
+            message.Headers.Add(new Header("x-member-id", member.Id.ToString()));
+            message.From.Add(new MailboxAddress(config["SenderName"], config["SenderEmail"]));
 
-            var header = new Header("x-meeting-id", meetingId.ToString());
+            bool send = false;
 
-            message.Headers.Add(header);
-            message.From.Add(from);
-            message.To.Add(to);
-
-            if (false == string.IsNullOrEmpty(member.Email2))
+            if (member.Notify && false == string.IsNullOrEmpty(member.Email))
             {
-                message.To.Add(new MailboxAddress(member.Name, member.Email2));
+                Log.LogInformation($"Sending email to {member.Email}.");
+
+                var to = new MailboxAddress(member.Name, member.Email);
+
+                message.To.Add(to);
+
+                send = true;
+            }
+            else
+            {
+                Log.LogInformation($"{member.Name} don't have a primairy email or don't want to receipt message on that email.");
             }
 
-            client.Send(message);
+            if (member.Notify2 && false == string.IsNullOrEmpty(member.Email2))
+            {
+                Log.LogInformation($"Sending email to {member.Email2}.");
+
+                var to2 = new MailboxAddress(member.Name, member.Email2);
+
+                message.To.Add(to2);
+
+                send = true;
+            }
+            else
+            {
+                Log.LogInformation($"{member.Name} don't have a secondary email or don't want to receipt message on that email.");
+            }
+
+            if (member.Notify3 && false == string.IsNullOrEmpty(member.Email3))
+            {
+                Log.LogInformation($"Sending email to {member.Email3}.");
+
+                var to3 = new MailboxAddress(member.Name, member.Email3);
+
+                message.To.Add(to3);
+
+                send = true;
+            }
+            else
+            {
+                Log.LogInformation($"{member.Name} don't have a third email or don't want to receipt message on that email.");
+            }
+
+            if (send)
+            {
+                client.Send(message);
+            }
         }
     }
 }

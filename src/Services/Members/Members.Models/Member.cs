@@ -1,4 +1,6 @@
-﻿namespace Members.Models
+﻿using System.Collections.Generic;
+
+namespace Members.Models
 {
     public class Member
     {
@@ -7,6 +9,8 @@
         public string Name { get; set; }
 
         public string Email { get; set; }
+
+        public bool Notify { get; set; }
 
         public string Note { get; set; }
 
@@ -22,6 +26,10 @@
 
         public string Email2 { get; set; }
 
+        public bool Notify2 { get; set; }
+
         public string Email3 { get; set; }
+
+        public bool Notify3 { get; set; }
     }
 }

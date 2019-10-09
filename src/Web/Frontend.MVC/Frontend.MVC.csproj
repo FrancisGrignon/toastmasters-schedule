@@ -9,6 +9,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Flurl.Http" Version="2.4.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.2.0" />

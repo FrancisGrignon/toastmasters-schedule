@@ -116,7 +116,11 @@ namespace Frontend.MVC.Controllers
                     member.Active = model.Active;
                     member.Alias = model.Alias;
                     member.Email = model.Email;
+                    member.Notify = model.Notify;
                     member.Email2 = model.Email2;
+                    member.Notify2 = model.Notify2;
+                    member.Email3 = model.Email3;
+                    member.Notify3 = model.Notify3;
                     member.Name = model.Name;
                     member.Note = model.Note;
 

@@ -14,6 +14,9 @@ namespace Frontend.MVC.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [Display(Name = "Notify")]
+        public bool Notify { get; set; }
+
         public string Note { get; set; }
 
         public bool Active { get; set; }
@@ -22,12 +25,19 @@ namespace Frontend.MVC.Models
 
         public string Rank { get; set; }
 
-        public bool Deleted { get; set; }
-
         [Required]
         public string Alias { get; set; }
 
         [EmailAddress]
         public string Email2 { get; set; }
+
+        [Display(Name = "Notify")]
+        public bool Notify2 { get; set; }
+
+        [EmailAddress]
+        public string Email3 { get; set; }
+
+        [Display(Name = "Notify")]
+        public bool Notify3 { get; set; }
     }
 }

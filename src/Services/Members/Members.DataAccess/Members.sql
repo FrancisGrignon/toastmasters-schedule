@@ -26,7 +26,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190520152139_TableMembersAddEmail')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190520152139_TableMembersAddEmail', N'2.2.4-servicing-10062');
+    VALUES (N'20190520152139_TableMembersAddEmail', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -48,7 +48,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190521000736_TableMembersAddToastmastersId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190521000736_TableMembersAddToastmastersId', N'2.2.4-servicing-10062');
+    VALUES (N'20190521000736_TableMembersAddToastmastersId', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -63,7 +63,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190621020244_TableMemberAddDeletedField')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190621020244_TableMemberAddDeletedField', N'2.2.4-servicing-10062');
+    VALUES (N'20190621020244_TableMemberAddDeletedField', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -85,7 +85,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190703012739_TableMembersAddAlias')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190703012739_TableMembersAddAlias', N'2.2.4-servicing-10062');
+    VALUES (N'20190703012739_TableMembersAddAlias', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -106,7 +106,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190703020839_TableMembersSetAliasMax255')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190703020839_TableMembersSetAliasMax255', N'2.2.4-servicing-10062');
+    VALUES (N'20190703020839_TableMembersSetAliasMax255', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -128,7 +128,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710011001_TableMemberAddEmail2And3')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190710011001_TableMemberAddEmail2And3', N'2.2.4-servicing-10062');
+    VALUES (N'20190710011001_TableMemberAddEmail2And3', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -162,7 +162,36 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190710021601_TableMemberAddEmail2And3Nullable')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190710021601_TableMemberAddEmail2And3Nullable', N'2.2.4-servicing-10062');
+    VALUES (N'20190710021601_TableMemberAddEmail2And3Nullable', N'2.2.6-servicing-10079');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20191004013026_TableMemberAddNotify')
+BEGIN
+    ALTER TABLE [Members] ADD [Notify] bit NOT NULL DEFAULT (1);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20191004013026_TableMemberAddNotify')
+BEGIN
+    ALTER TABLE [Members] ADD [Notify2] bit NOT NULL DEFAULT (1);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20191004013026_TableMemberAddNotify')
+BEGIN
+    ALTER TABLE [Members] ADD [Notify3] bit NOT NULL DEFAULT (1);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20191004013026_TableMemberAddNotify')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20191004013026_TableMemberAddNotify', N'2.2.6-servicing-10079');
 END;
 
 GO
