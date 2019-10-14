@@ -21,7 +21,9 @@
 
             <div class="form-group">
                 Membre
-                <select asp-for="MemberId" asp-items="Model.Members"></select>
+                <select asp-for="MemberId" asp-items="Model.Members">
+                    <option value="">- Sélectionner un membre -</option>    
+                </select>
                 <span asp-validation-for="MemberId" class="text-danger"></span>
             </div>
 

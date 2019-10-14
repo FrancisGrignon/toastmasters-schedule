@@ -22,7 +22,7 @@ namespace Frontend.MVC.Models
 
         public string RoleName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Un membre est requis.")]
         public int MemberId { get; set; }
 
         public List<SelectListItem> Members { get; set; }

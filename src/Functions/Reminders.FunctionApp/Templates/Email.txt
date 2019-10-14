@@ -8,7 +8,7 @@ Votre rôle sera le suivant :
 Y a-t-il des volontaires* pour :
 
 ###emptyroles###
-* Veuillez accéder au site https://orateurs.azurewebsites.net ou RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
+* Veuillez accéder au site https://orateurs.azurewebsites.net/m/###memberid### ou RÉPONDRE (« reply ») pour choisir un rôle ou pour aviser de votre absence si vous aviez un rôle prévu à l’horaire.
 
 ###calendar###
 
@@ -31,4 +31,4 @@ francis.grignon@canada.ca
 613.513.7165
 
 Les Orateurs de Statistique Canada
-https://orateurs.azurewebsites.net
+https://orateurs.azurewebsites.net/m/###memberid###

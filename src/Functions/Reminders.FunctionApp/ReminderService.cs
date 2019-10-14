@@ -87,6 +87,7 @@ namespace Reminders.FunctionApp
             sb.Replace("###name###", member.Alias);
             sb.Replace("###date###", meetings[0].Date.ToString("dddd le dd MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("fr-CA")));
             sb.Replace("###theme###", meetings[0].Name);
+            sb.Replace("###memberid###", member.Id.ToString());
 
             var buffer = new StringBuilder();
             var myRole = new StringBuilder();
@@ -161,6 +162,7 @@ namespace Reminders.FunctionApp
             sb.Replace("###name###", member.Alias);
             sb.Replace("###date###", meetings[0].Date.ToString("dddd le d MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("fr-CA")));
             sb.Replace("###theme###", meetings[0].Name);
+            sb.Replace("###memberid###", member.Id.ToString());
 
             var buffer = new StringBuilder();
             var myRole = new StringBuilder();
