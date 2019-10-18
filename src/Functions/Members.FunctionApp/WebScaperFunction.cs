@@ -207,7 +207,11 @@ namespace Members.FunctionApp
 
                 if (null == members || 0 == members.Count)
                 {
-                    member = new Member();
+                    member = new Member
+                    {
+                        Notify = true,
+                        Notify2 = true
+                    };
                 }
                 else
                 {
