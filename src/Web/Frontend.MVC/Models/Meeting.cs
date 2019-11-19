@@ -17,7 +17,7 @@ namespace Frontend.MVC.Models
         public string Note { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         public ICollection<Attendee> Attendees { get; set; }
