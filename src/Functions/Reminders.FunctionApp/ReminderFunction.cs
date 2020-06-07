@@ -9,7 +9,7 @@ namespace Reminders.FunctionApp
     public static class ReminderFunction
     {
         [FunctionName("Reminder")]
-        public static async Task Run([TimerTrigger("0 0 10 * * 4,1")]TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public static async Task Run([TimerTrigger("0 0 10 * * 3,5")]TimerInfo myTimer, ILogger log, ExecutionContext context)
         // public static async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             var config = new ConfigurationBuilder()

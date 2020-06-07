@@ -50,7 +50,8 @@ namespace Meetings.API.Helpers
                 Name = meeting.Name,
                 Note = meeting.Note,
                 Date = meeting.Date,
-                Attendees = Convert(attendees)
+                Attendees = Convert(attendees),
+                Cancelled = meeting.Cancelled
             };
         }
 
@@ -62,7 +63,8 @@ namespace Meetings.API.Helpers
                 Name = meeting.Name,
                 Note = meeting.Note,
                 Date = meeting.Date,
-                Attendees = Convert(meeting.Attendees)
+                Attendees = Convert(meeting.Attendees),
+                Cancelled = meeting.Cancelled
             };
         }
 

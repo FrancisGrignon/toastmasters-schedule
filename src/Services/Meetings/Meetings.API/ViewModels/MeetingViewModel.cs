@@ -19,5 +19,7 @@ namespace Meetings.API.ViewModels
         public DateTime Date { get; set; }
 
         public IEnumerable<AttendeeViewModel> Attendees { get; set; }
+
+        public bool Cancelled { get; set; }
     }
 }
