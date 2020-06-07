@@ -116,6 +116,7 @@ namespace Frontend.MVC.Controllers
                     meeting.Name = model.Name;
                     meeting.Note = model.Note;
                     meeting.Date = model.Date;
+                    meeting.Cancelled = model.Cancelled;
 
                     var response = await client.Update(meeting);
 

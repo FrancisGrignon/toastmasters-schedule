@@ -17,5 +17,7 @@ namespace Meetings.API.ViewModels
 
         [Required]
         public DateTime Date { get; set; }
+
+        public bool Cancelled { get; set; }
     }
 }

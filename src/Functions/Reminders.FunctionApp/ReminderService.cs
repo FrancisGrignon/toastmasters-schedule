@@ -31,49 +31,58 @@ namespace Reminders.FunctionApp
             Log.LogInformation("Reading meetings");
 
             var meetings = await new MeetingClient(Configuration).GetPlanning();
+            
+            var cancelled = meetings[0].Cancelled;
 
-            Log.LogInformation("Reading members");
-
-            var memberClient = new MemberClient(Configuration);
-            var members = await memberClient.GetAll();
-
-            string htmlBody = null, textBody;
-
-            var date = meetings[0].Date.ToString("yyyy-MM-dd");
-            var theme = meetings[0].Name;
-            var subject = $"Les Orateurs - {date} (Thème : {theme})";
-
-            Log.LogInformation("Preparing calendar");
-
-            var calendar = BuildCalendar(meetings);
-            var mailServer = Configuration["MailServer"];
-
-            Log.LogInformation($"Connecting to mail server {mailServer}");
-
-            using (var client = new SmtpClient())
+            if (cancelled)
             {
-                if (false == int.TryParse(Configuration["MailPort"], out int port))
+                Log.LogInformation("Meeting cancelled. No need to send emails.");
+            }
+            else
+            {
+                string htmlBody = null, textBody;
+
+                var date = meetings[0].Date.ToString("yyyy-MM-dd");
+                var theme = meetings[0].Name;
+                var subject = $"Les Orateurs - {date} (Thème : {theme})";
+
+                Log.LogInformation("Reading members");
+
+                var memberClient = new MemberClient(Configuration);
+                var members = await memberClient.GetAll();
+
+                Log.LogInformation("Preparing calendar");
+
+                var calendar = BuildCalendar(meetings);
+                var mailServer = Configuration["MailServer"];
+
+                Log.LogInformation($"Connecting to mail server {mailServer}");
+
+                using (var client = new SmtpClient())
                 {
-                    port = 465;
+                    if (false == int.TryParse(Configuration["MailPort"], out int port))
+                    {
+                        port = 465;
+                    }
+
+                    client.Connect(mailServer, port, true);
+                    client.Authenticate(Configuration["SenderEmail"], Configuration["Password"]);
+
+                    foreach (var member in members)
+                    {
+                        Log.LogInformation($"Formating email for {member.Name}");
+
+                        // Html function not ready
+                        // htmlBody = BuildHtml(calendar, meetings, member);
+                        textBody = BuildText(calendar, meetings, member);
+
+                        Log.LogInformation($"Sending email to {member.Name}");
+
+                        SendEmail(client, member, subject, htmlBody, textBody, meetings[0].Id);
+                    }
+
+                    client.Disconnect(true);
                 }
-
-                client.Connect(mailServer, port, true);
-                client.Authenticate(Configuration["SenderEmail"], Configuration["Password"]);
-
-                foreach (var member in members)
-                {
-                    Log.LogInformation($"Formating email for {member.Name}");
-
-                    // Html function not ready
-                    // htmlBody = BuildHtml(calendar, meetings, member);
-                    textBody = BuildText(calendar, meetings, member);
-
-                    Log.LogInformation($"Sending email to {member.Name}");
-
-                    SendEmail(client, member, subject, htmlBody, textBody, meetings[0].Id);
-                }
-
-                client.Disconnect(true);
             }
 
             return 0;

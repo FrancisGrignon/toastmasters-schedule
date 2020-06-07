@@ -20,5 +20,7 @@ namespace Meetings.Models
         public DateTime UpdatedAt { get; set; }
 
         public ICollection<Attendee> Attendees { get; set; }
+
+        public bool Cancelled { get; set; }        
     }
 }

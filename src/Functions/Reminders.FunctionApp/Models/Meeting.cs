@@ -14,5 +14,7 @@ namespace Reminders.FunctionApp.Models
         public DateTime Date { get; set; }
 
         public ICollection<Attendee> Attendees { get; set; }
+
+        public bool Cancelled { get; set; }
     }
 }

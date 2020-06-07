@@ -90,6 +90,7 @@ namespace Meetings.API.Controllers
             entity.Date = model.Date;
             entity.Name = model.Name;
             entity.Note = model.Note;
+            entity.Cancelled = model.Cancelled;
 
             _meetingRepository.Update(entity);
 
@@ -122,6 +123,7 @@ namespace Meetings.API.Controllers
                 Date = model.Date,
                 Name = model.Name,
                 Note = model.Note,
+                Cancelled = model.Cancelled
             };
 
             _meetingRepository.Add(meeting);
