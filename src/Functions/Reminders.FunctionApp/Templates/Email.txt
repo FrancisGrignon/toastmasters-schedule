@@ -1,6 +1,10 @@
 ﻿Bonjour ###name###,
 
-La prochaine rencontre aura pour thème : « ###theme### ». Elle aura lieu ###date### dans la salle SC-1206 (immeuble Principal).
+La prochaine rencontre aura pour thème : « ###theme### ». Elle aura lieu ###date### dans en ligne.
+
+###conferenceurl###
+Conférence: ###conferenceid###
+Mot de passe: ###conferencepassword###
 
 Votre rôle sera le suivant :
 
@@ -12,14 +16,11 @@ Y a-t-il des volontaires* pour :
 
 ###calendar###
 
-Pour les employés de Statistique Canada, vous pouvez consulter le répertoire partagé (\\fld6filer\Toastmasters\Les Orateurs de Statcan\) pour trouver quelques documents de référence en anglais et en français.
-
 Les visiteurs sont toujours les bienvenus!
             
 Pour la rencontre, il est de votre responsabilité d’apporter :
             
 - Votre copie de l’ordre du jour.
-- Votre manuel « Devenir un leader » et votre manuel « Savoir communiquer », OU vos feuilles imprimées d’évaluation de projet Pathways le cas échéant.
 
 À bientôt!
 

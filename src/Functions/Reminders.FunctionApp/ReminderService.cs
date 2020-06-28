@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using Reminders.FunctionApp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -172,6 +173,10 @@ namespace Reminders.FunctionApp
             sb.Replace("###date###", meetings[0].Date.ToString("dddd le d MMMM yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("fr-CA")));
             sb.Replace("###theme###", meetings[0].Name);
             sb.Replace("###memberid###", member.Id.ToString());
+
+            sb.Replace("###conferenceurl###", Configuration["ConferenceUrl"]);
+            sb.Replace("###conferenceid###", Configuration["ConferenceId"]);
+            sb.Replace("###conferencepassword###", Configuration["ConferencePassword"]);
 
             var buffer = new StringBuilder();
             var myRole = new StringBuilder();

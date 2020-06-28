@@ -12,5 +12,8 @@
   "MailPort": 465,
   "SenderName": "",
   "SenderEmail": "",
-  "Password": ""
+  "Password": "",
+  "ConferenceUrl": "",
+  "ConferenceId": "",
+  "ConferencePassword": ""
 }
