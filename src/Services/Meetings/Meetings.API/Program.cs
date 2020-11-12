@@ -31,7 +31,7 @@ namespace Meetings.API
 
                 host.MigrateDbContext<MeetingContext>((context, services) =>
                 {
-                    var env = services.GetService<IHostingEnvironment>();
+                    var env = services.GetService<IWebHostEnvironment>();
                     var settings = services.GetService<IOptions<MeetingSettings>>();
                     var logger = services.GetService<ILogger<MeetingContextSeed>>();
 
@@ -57,7 +57,6 @@ namespace Meetings.API
 
         public static IWebHost CreateWebHostBuilder(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseApplicationInsights()
                 .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .UseSerilog()

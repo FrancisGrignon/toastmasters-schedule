@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using System;
-using System.Data.SqlClient;
 
 namespace Meetings.API.Extensions
 {
@@ -23,8 +22,8 @@ namespace Meetings.API.Extensions
                 try
                 {
                     logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
-                    
-                    var retry = Policy.Handle<SqlException>()
+
+                    var retry = Policy.Handle<Exception>()
                             .WaitAndRetry(new TimeSpan[]
                             {
                                 TimeSpan.FromSeconds(3),

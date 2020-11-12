@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Serilog;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -32,42 +32,45 @@ namespace Meetings.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Meetings", Version = "v1" });
+            });
 
             services
                 .AddCustomDbContext(Configuration)
                 .AddCustomOptions(Configuration)
                 .AddRepositories()
                 .AddServices()
-                .AddSwagger();
+                .AddSwagger()
+                .AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseSwagger()
-                .UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Toastmasters - Meetings HTTP API");
-                c.RoutePrefix = string.Empty;
-            });
-
+              
             app.ConfigureExceptionHandler();
             app.ApplyApiKeyValidation();
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 
@@ -89,7 +92,7 @@ namespace Meetings.API
 
                 // Changing default behavior when client evaluation occurs to throw. 
                 // Default in EF Core would be to log a warning when client evaluation is performed.
-                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                // ### options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryPossibleExceptionWithAggregateOperatorWarning));
                 // Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
             });
 
@@ -138,29 +141,24 @@ namespace Meetings.API
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Info
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Title = "Toastmasters - Meetings HTTP API",
-                    Version = "v1",
-                    Description = "The Meetings Microservice HTTP API.",
-                    TermsOfService = "Terms Of Service"
-                });
-
-                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    In = "header",
+                    In = ParameterLocation.Header,
                     Description = "Please provide your api key",
                     Name = "x-api-key",
-                    Type = "apiKey"
+                    Type = SecuritySchemeType.ApiKey
                 });
 
-                var security = new Dictionary<string, IEnumerable<string>>
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { "Bearer", new string[] { } },
-                };
-
-                options.AddSecurityRequirement(security);
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" }
+                        }, new List<string>() }
+                });
 
                 options.CustomSchemaIds(SchemaIdStrategy);
             });

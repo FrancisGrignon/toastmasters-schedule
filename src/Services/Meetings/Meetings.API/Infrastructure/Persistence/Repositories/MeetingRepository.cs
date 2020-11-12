@@ -18,7 +18,7 @@ namespace Meetings.API.Infrastructure.Persistence.Repositories
 
         public Task<Meeting[]> GetPlanningWithAttenteesAndRolesAsync(int numberOfMeetings)
         {
-            var startAt = DateTime.UtcNow;
+            var startAt = DateTime.UtcNow.AddDays(-1);
 
             return Context.Meetings
                 .Include(meeting => meeting.Attendees)

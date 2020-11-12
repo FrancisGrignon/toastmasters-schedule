@@ -6,13 +6,12 @@ using Microsoft.Extensions.Options;
 using Polly;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace Meetings.Infrastructure
 {
     public class MeetingContextSeed
     {
-        public void Seed(MeetingContext context, IHostingEnvironment env, IOptions<MeetingSettings> settings, ILogger<MeetingContextSeed> logger)
+        public void Seed(MeetingContext context, IWebHostEnvironment env, IOptions<MeetingSettings> settings, ILogger<MeetingContextSeed> logger)
         {
             var policy = CreatePolicy(logger, nameof(MeetingContextSeed));
 
@@ -67,7 +66,7 @@ namespace Meetings.Infrastructure
 
         private Policy CreatePolicy(ILogger<MeetingContextSeed> logger, string prefix, int retries = 3)
         {
-            return Policy.Handle<SqlException>().
+            return Policy.Handle<Exception>().
                 WaitAndRetry(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

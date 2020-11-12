@@ -45,6 +45,5 @@ namespace Meetings.API.Helpers
 
             await _next.Invoke(context);
         }
-
     }
 }
