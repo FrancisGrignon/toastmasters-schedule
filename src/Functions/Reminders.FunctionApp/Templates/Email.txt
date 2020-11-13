@@ -3,8 +3,6 @@
 La prochaine rencontre aura pour thème : « ###theme### ». Elle aura lieu ###date### dans en ligne.
 
 ###conferenceurl###
-Conférence: ###conferenceid###
-Mot de passe: ###conferencepassword###
 
 Votre rôle sera le suivant :
 
