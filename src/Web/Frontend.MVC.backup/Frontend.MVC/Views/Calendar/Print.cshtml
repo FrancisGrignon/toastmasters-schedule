@@ -1,0 +1,64 @@
+﻿@model Calendar
+
+@{
+    ViewData["Title"] = "Calendrier";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                <td class="text-center">
+                    @Model[x, 0].Value
+                </td>
+                }
+            </tr>
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                <td class="text-center">
+                    <span>@Model[x, 1].Value</span>
+                </td>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int y = 2; y < Model.MaxY; y++)
+            {
+            <tr>
+                @for (int x = 0; x < Model.MaxX; x++)
+                {
+                @if (0 == x)
+                    {
+                <td>
+                    <span>@Model[x, y].Value</span>
+                </td>
+                    }
+                    else
+                    {
+                <td class="text-center">
+                    @if (Model[x, y].CanAccept)
+                    {
+                    <span></span>
+                    }
+                    else if (Model[x, y].CanRefuse)
+                    {
+                    <span>@Model[x, y].Value</span>
+                    }
+                    else
+                    {
+                    <span>@Model[x, y].Value</span>
+                    }
+                </td>
+                    }
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

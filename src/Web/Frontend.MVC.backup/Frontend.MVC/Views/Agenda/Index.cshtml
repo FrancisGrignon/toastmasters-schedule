@@ -1,0 +1,191 @@
+﻿@model Frontend.MVC.Models.AgendaViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div>
+    <div class="row d-print-none">
+        <div class="col-sm-4">
+            Salle 1206, Immeuble Principal<br />
+            <br />
+            Date : @Html.DisplayFor(model => model.Date)<br />
+            Thème : @Html.DisplayFor(model => model.Name)<br />
+            <br />
+            Mardi de midi à 13 h<br />
+            <a href="https://orateurs.azurewebsites.net">orateurs.azurewebsites.net</a>
+        </div>
+        <div class="col-sm-4 justify-content-center">
+            <img src="~/images/logo.gif" alt="Toastmasters logos" width="189" height="157" />
+        </div>
+        <div class="col-sm-4 text-right">
+            No du Club : 946842<br />
+            District 61<br />
+            <br />
+            VP Formation : Francis Grignon<br />
+            613-513-7165
+        </div>
+    </div>
+    
+    <div class="row d-none d-print-block">
+        <div class="col-sm">
+            Emplacement : Salle 1206, Immeuble Principal<br />
+            Date : @Html.DisplayFor(model => model.Date)<br />
+            Thème : @Html.DisplayFor(model => model.Name)<br />
+            Horaire: Mardi de midi à 13 h<br />
+            <br />
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Heure
+                </th>
+                <th>
+                    Rôle ou tâche
+                </th>
+                <th>
+                    Membre
+                </th>
+                <th>
+                    Durée
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="font-weight-bold" rowspan="7">12:05</td>
+                <td class="font-weight-bold">1 – OUVERTURE DE LA RENCONTRE</td>
+                <td class="font-weight-bold">@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>--</td>
+            </tr>
+            <tr>
+                <td>Révision de l’ordre du jour (vérifier présences et rôles à combler ET présenter les invités, s’il y a lieu)</td>
+                <td>@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Présentation de l’équipe d’évaluateurs et explication des rôles (s’il y a des invités)</td>
+                <td>@Html.DisplayFor(model => model.GeneralEvaluator)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Introduction du thème</td>
+                <td>@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Mot du jour</td>
+                <td>@Html.DisplayFor(model => model.WordOfTheDay)</td>
+                <td>1 min</td>
+            </tr>
+            <tr>
+                <td>Toast</td>
+                <td>@Html.DisplayFor(model => model.Toast)</td>
+                <td>1 min</td>
+            </tr>
+            <tr>
+                <td>Farce/Anecdote</td>
+                <td>@Html.DisplayFor(model => model.Humour)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold" rowspan="6">12:15</td>
+                <td class="font-weight-bold">2 – SUJETS IMPROVISÉS</td>
+                <td class="font-weight-bold">@Html.DisplayFor(model => model.TopicsMaster)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td> Sujet #1</td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td> Sujet #2</td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td> Sujet #3</td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td> Sujet #4</td>
+                <td></td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Conclusion</td>
+                <td>@Html.DisplayFor(model => model.TopicsMaster)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold" rowspan="2">12:30</td>
+                <td class="font-weight-bold">3 – DISCOURS PRÉPARÉ  ou SÉANCE ÉDUCATIVE</td>
+                <td class="font-weight-bold">@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Orateur(trice)</td>
+                <td>@Html.DisplayFor(model => model.Speaker)</td>
+                <td>5-7 min</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold" rowspan="6">12:40</td>
+                <td class="font-weight-bold">4 – RAPPORTS ET ÉVALUATIONS</td>
+                <td class="font-weight-bold">@Html.DisplayFor(model => model.GeneralEvaluator)</td>
+                <td>--</td>
+            </tr>
+            <tr>
+                <td>Évaluateur(trice) des improvisations ou du discours</td>
+                <td>@Html.DisplayFor(model => model.Evaluator)</td>
+                <td>3 min</td>
+            </tr>
+            <tr>
+                <td>Grammairien(ne)/Compteur(euse) d’hésitations</td>
+                <td>@Html.DisplayFor(model => model.Grammarian)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Écouteur(euse)</td>
+                <td>@Html.DisplayFor(model => model.Listener)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Chronométreur(euse)</td>
+                <td>@Html.DisplayFor(model => model.Timer)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td>Conclusion de l’évaluateur(trice) général(e)</td>
+                <td>@Html.DisplayFor(model => model.GeneralEvaluator)</td>
+                <td>2 min</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold" rowspan="3">12:52</td>
+                <td class="font-weight-bold">5 – CLÔTURE</td>
+                <td class="font-weight-bold">@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>--</td>
+            </tr>
+            <tr>
+                <td>Prochain ordre du jour... faire circuler durant la rencontre</td>
+                <td>@Html.DisplayFor(model => model.Toastmaster)</td>
+                <td>--</td>
+            </tr>
+            <tr>
+                <td>Commentaires des invité(e)s, annonces, vote des sujets improvisés...</td>
+                <td>Ouvert à tous</td>
+                <td>3 min</td>
+            </tr>
+            <tr>
+                <td>12:55</td>
+                <td colspan="3">Clôture de la rencontre</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>@Html.DisplayFor(model => model.Note)</p>
+</div>

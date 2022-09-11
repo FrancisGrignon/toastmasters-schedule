@@ -3,7 +3,6 @@ using Flurl.Http;
 using Frontend.MVC.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Frontend.MVC
@@ -53,7 +52,7 @@ namespace Frontend.MVC
                 .GetJsonAsync<Attendee>();
         }
 
-        public async Task<HttpResponseMessage> Create(Meeting meeting)
+        public async Task<IFlurlResponse> Create(Meeting meeting)
         {
             return await _baseUrl
                 .AppendPathSegment($"v1/meetings")
@@ -61,7 +60,7 @@ namespace Frontend.MVC
                 .PostJsonAsync(meeting);
         }
 
-        public async Task<HttpResponseMessage> Delete(Meeting meeting)
+        public async Task<IFlurlResponse> Delete(Meeting meeting)
         {
             return await _baseUrl
                 .AppendPathSegment($"v1/meetings/{meeting.Id}")
@@ -69,7 +68,7 @@ namespace Frontend.MVC
                 .DeleteAsync();
         }
 
-        public async Task<HttpResponseMessage> Update(Meeting meeting)
+        public async Task<IFlurlResponse> Update(Meeting meeting)
         {
             return await _baseUrl
                 .AppendPathSegment($"v1/meetings/{meeting.Id}")
@@ -77,7 +76,7 @@ namespace Frontend.MVC
                 .PutJsonAsync(meeting);
         }
 
-        public async Task<HttpResponseMessage> UpdateAttendee(int meetingId, Attendee attendee)
+        public async Task<IFlurlResponse> UpdateAttendee(int meetingId, Attendee attendee)
         {
             return await _baseUrl
                 .AppendPathSegment($"v1/meetings/{meetingId}/attendees/{attendee.Id}")

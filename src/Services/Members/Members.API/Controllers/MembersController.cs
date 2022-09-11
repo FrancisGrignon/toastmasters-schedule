@@ -21,8 +21,10 @@ namespace Members.API.Controllers
         }
 
         // GET: api/Members
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMembers(string email, int? toastmastersId)
+
+
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Member>>> GetMembers(string? email, int? toastmastersId)
         {
             var query = _context.Members.Where(p => false == p.Deleted);
 

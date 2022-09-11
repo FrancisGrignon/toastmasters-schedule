@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Microsoft.AspNetCore.Mvc.Controller
     {
         public IActionResult Index(int? m)
         {
@@ -26,7 +26,7 @@ namespace Frontend.MVC.Controllers
 
         // GET: M/5
         [HttpGet("/m/{id:int?}")]
-        public ActionResult M(int? id)
+        public Microsoft.AspNetCore.Mvc.ActionResult M(int? id)
         {
             // Save the member id in a cookie
             if (id.HasValue)

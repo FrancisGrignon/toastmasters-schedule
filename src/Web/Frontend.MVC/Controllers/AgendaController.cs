@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class AgendaController : Controller
+    public class AgendaController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IConfiguration _config;
 
@@ -16,7 +16,7 @@ namespace Frontend.MVC.Controllers
 
         // GET: Agenda/{id}
         [HttpGet("Agenda/{id:int}")]
-        public async Task<ActionResult> Index(int id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(int id)
         {
             var client = new MeetingClient(_config);
 

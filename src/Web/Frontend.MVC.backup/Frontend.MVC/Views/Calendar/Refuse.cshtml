@@ -1,0 +1,19 @@
+﻿@model Frontend.MVC.Models.RefuseViewModel
+
+@{
+    ViewData["Title"] = "Refuser un rôle";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <hr />
+    <p>Êtes-vous certains de vouloir retirer le role de @Model.RoleName à @Model.MemberName?</p>
+
+    <form asp-action="Refuse">
+        <input asp-for="MeetingId" />
+        <input asp-for="AttendeeId" />
+        <input type="submit" value="Oui" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour au calendrier</a>
+    </form>
+</div>

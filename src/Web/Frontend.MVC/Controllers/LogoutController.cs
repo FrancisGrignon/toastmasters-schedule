@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class LogoutController : Controller
+    public class LogoutController : Microsoft.AspNetCore.Mvc.Controller
     {
-        public async Task<ActionResult> Index()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 

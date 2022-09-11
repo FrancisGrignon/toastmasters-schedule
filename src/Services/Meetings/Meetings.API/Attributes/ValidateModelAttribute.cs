@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Meetings.API.Attributes
 {
-    public class ValidateModelAttribute : ActionFilterAttribute
+    public class ValidateModelAttribute : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)
             {

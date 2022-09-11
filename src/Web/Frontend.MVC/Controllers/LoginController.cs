@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -34,7 +34,7 @@ namespace Frontend.MVC.Controllers
         // POST: Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([FromForm]LoginViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index([FromForm]LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace Frontend.MVC.Controllers
                         return Redirect(model.ReturnUrl);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return View(model);
                 }

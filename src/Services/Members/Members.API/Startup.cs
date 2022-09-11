@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
@@ -27,8 +28,6 @@ namespace Members.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             var connection = Configuration.GetConnectionString("Database");
 
             services.AddDbContext<MemberContext>(options => options.UseSqlServer(connection));
@@ -41,9 +40,9 @@ namespace Members.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if ("Development" == env.EnvironmentName)
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -69,6 +68,7 @@ namespace Members.API
             app.ConfigureExceptionHandler();
             app.UseHttpsRedirection();
             app.UseMvc();
+            //app.UseMvc();
         }
     }
 
@@ -102,28 +102,37 @@ namespace Members.API
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                //options.DescribeAllEnumsAsStrings();
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Toastmasters - Members HTTP API",
                     Version = "v1",
-                    Description = "The Members Microservice HTTP API.",
-                    TermsOfService = "Terms Of Service"
+                    Description = "The Members Microservice HTTP API."
                 });
-                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    In = "header",
+                    In = ParameterLocation.Header,
                     Description = "Please provide your api key",
                     Name = "x-api-key",
-                    Type = "apiKey"
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
                 });
 
-                var security = new Dictionary<string, IEnumerable<string>>
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { "Bearer", new string[] { } },
-                };
-
-                options.AddSecurityRequirement(security);
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             return services;

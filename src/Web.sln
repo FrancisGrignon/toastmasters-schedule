@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meetings.API", "Services\Meetings\Meetings.API\Meetings.API.csproj", "{1D29358B-526E-4E68-87D6-DEC11FF5BFE2}"
 EndProject
@@ -34,11 +34,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Absences", "Absences", "{99BBAC2B-6C20-43EB-BE5F-7C7268593EB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Absences.Models", "Services\Absences\Absences.Models\Absences.Models.csproj", "{6962C84C-7AC6-4B7D-84F5-A773DA4468D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Absences.Models", "Services\Absences\Absences.Models\Absences.Models.csproj", "{6962C84C-7AC6-4B7D-84F5-A773DA4468D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Absences.API", "Services\Absences\Absences.API\Absences.API.csproj", "{A39E6EA1-4D85-4F28-B5A2-5B4D54CF8A8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Absences.API", "Services\Absences\Absences.API\Absences.API.csproj", "{A39E6EA1-4D85-4F28-B5A2-5B4D54CF8A8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Absences.DataAccess", "Services\Absences\Absences.DataAccess\Absences.DataAccess.csproj", "{42FA9A58-6898-4385-8C83-F7F7EAD92C81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Absences.DataAccess", "Services\Absences\Absences.DataAccess\Absences.DataAccess.csproj", "{42FA9A58-6898-4385-8C83-F7F7EAD92C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MembersV6.API", "Services\Members\MembersV6.API\MembersV6.API.csproj", "{B6403050-F1E4-48CE-BA77-54FFBA292E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,10 @@ Global
 		{42FA9A58-6898-4385-8C83-F7F7EAD92C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42FA9A58-6898-4385-8C83-F7F7EAD92C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42FA9A58-6898-4385-8C83-F7F7EAD92C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6403050-F1E4-48CE-BA77-54FFBA292E35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6403050-F1E4-48CE-BA77-54FFBA292E35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6403050-F1E4-48CE-BA77-54FFBA292E35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6403050-F1E4-48CE-BA77-54FFBA292E35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{6962C84C-7AC6-4B7D-84F5-A773DA4468D0} = {99BBAC2B-6C20-43EB-BE5F-7C7268593EB2}
 		{A39E6EA1-4D85-4F28-B5A2-5B4D54CF8A8C} = {99BBAC2B-6C20-43EB-BE5F-7C7268593EB2}
 		{42FA9A58-6898-4385-8C83-F7F7EAD92C81} = {99BBAC2B-6C20-43EB-BE5F-7C7268593EB2}
+		{B6403050-F1E4-48CE-BA77-54FFBA292E35} = {D485369B-FD53-474B-90E5-0E31EAEA9601}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A263666E-5499-4575-826B-8B4E69F44786}

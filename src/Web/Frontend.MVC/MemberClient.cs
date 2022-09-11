@@ -49,7 +49,7 @@ namespace Frontend.MVC
                 .ReceiveJson<bool>();
         }
 
-        public async Task<HttpResponseMessage> Create(Member member)
+        public async Task<IFlurlResponse> Create(Member member)
         {
             return await _baseUrl
                 .AppendPathSegment($"members")
@@ -57,7 +57,7 @@ namespace Frontend.MVC
                 .PostJsonAsync(member);
         }
 
-        public async Task<HttpResponseMessage> Delete(Member member)
+        public async Task<IFlurlResponse> Delete(Member member)
         {
             return await _baseUrl
                 .AppendPathSegment($"members/{member.Id}")
@@ -65,7 +65,7 @@ namespace Frontend.MVC
                 .DeleteAsync();
         }
 
-        public async Task<HttpResponseMessage> Update(Member member)
+        public async Task<IFlurlResponse> Update(Member member)
         {
             return await _baseUrl
                 .AppendPathSegment($"members/{member.Id}")
