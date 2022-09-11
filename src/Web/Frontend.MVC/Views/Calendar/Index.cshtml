@@ -21,7 +21,7 @@
                 @for (int x = 0; x < Model.MaxX; x++)
                 {
                 <td>
-                    @Model[x, 1].Value
+                    @Html.ActionLink(Model[x, 1].Value, "Index", "Agenda", new { id = Model[x, 0].MeetingId })
                 </td>
                 }
             </tr>

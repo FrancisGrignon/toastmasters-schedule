@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Frontend.MVC.Controllers
 {
     [Authorize]
-    public class MembersController : Microsoft.AspNetCore.Mvc.Controller
+    public class MembersController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -20,7 +20,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Members
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var client = new MemberClient(_config);
 
@@ -30,7 +30,7 @@ namespace Frontend.MVC.Controllers
         }
         
         // GET: Members/Details/5
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var client = new MemberClient(_config);
 
@@ -44,7 +44,7 @@ namespace Frontend.MVC.Controllers
             return View(Member);
         }
 
-        public Microsoft.AspNetCore.Mvc.ActionResult Create()
+        public ActionResult Create()
         {
             var Member = new Member();
 
@@ -54,7 +54,7 @@ namespace Frontend.MVC.Controllers
         // POST: Members/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Create([FromForm]Member model)
+        public async Task<ActionResult> Create([FromForm]Member model)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await client.Create(model);
 
-                    if (200 == response.StatusCode)
+                    if (201 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Le member {model.Name} a été ajoutée.");
 
@@ -81,7 +81,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Members/Edit/5
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             var client = new MemberClient(_config);
 
@@ -98,7 +98,7 @@ namespace Frontend.MVC.Controllers
         // POST: Members/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int id, [FromForm]Member model)
+        public async Task<ActionResult> Edit(int id, [FromForm]Member model)
         {
             if (ModelState.IsValid)
             {
@@ -126,7 +126,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await client.Update(member);
 
-                    if (200 == response.StatusCode)
+                    if (204 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Le membre {model.Name} a été modifiée.");
 
@@ -143,7 +143,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Members/Delete/5
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var client = new MemberClient(_config);
 
@@ -160,7 +160,7 @@ namespace Frontend.MVC.Controllers
         // POST: Members/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Delete(int id, [FromForm]Member model)
+        public async Task<ActionResult> Delete(int id, [FromForm]Member model)
         {
             try
             {

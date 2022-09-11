@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class CalendarController : Microsoft.AspNetCore.Mvc.Controller
+    public class CalendarController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -22,7 +22,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Calendar
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var client = new MeetingClient(_config);
 
@@ -93,7 +93,7 @@ namespace Frontend.MVC.Controllers
 
         // GET: Calendar
         [Route("[controller]/print")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Print()
+        public async Task<ActionResult> Print()
         {
             var client = new MeetingClient(_config);
 
@@ -161,7 +161,7 @@ namespace Frontend.MVC.Controllers
             return View(calendar);
         }
 
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Accept(int id, int attendeeId)
+        public async Task<ActionResult> Accept(int id, int attendeeId)
         {
             var client = new MeetingClient(_config);
 
@@ -209,7 +209,7 @@ namespace Frontend.MVC.Controllers
         // POST: Calendar/Accept/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Accept(int id, [FromForm]AcceptViewModel model)
+        public async Task<ActionResult> Accept(int id, [FromForm]AcceptViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -242,7 +242,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await meetingClient.UpdateAttendee(id, attendee);
 
-                    if (200 == response.StatusCode)
+                    if (204 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Merci, le role {attendee.Role.Name} a été assigné à {attendee.Member.Name}.");
 
@@ -264,7 +264,7 @@ namespace Frontend.MVC.Controllers
             return View(model);
         }
 
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Refuse(int id, int attendeeId)
+        public async Task<ActionResult> Refuse(int id, int attendeeId)
         {
             var client = new MeetingClient(_config);
 
@@ -297,7 +297,7 @@ namespace Frontend.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Refuse(int id, [FromForm]RefuseViewModel model)
+        public async Task<ActionResult> Refuse(int id, [FromForm]RefuseViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -319,7 +319,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await meetingClient.UpdateAttendee(id, attendee);
 
-                    if (200 == response.StatusCode)
+                    if (204 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Merci, le rôle {attendee.Role.Name} a été retiré à {member.Name}.");
 

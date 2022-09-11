@@ -7,3 +7,23 @@
 */bin
 */obj
 **/.toolstarget
+
+# Ignore appsettings
+**/appsettings.development.json
+**/appsettings.staging.json
+**/appsettings.production.json
+
+# Ignore connectionstrings
+**/connectionstrings.development.json
+**/connectionstrings.staging.json
+**/connectionstrings.production.json
+
+# Ignore mailsettings
+**/mailsettings.development.json
+**/mailsettings.staging.json
+**/mailsettings.production.json
+
+# Ignore mailsettings
+**/local.development.json
+**/local.staging.json
+**/local.production.json

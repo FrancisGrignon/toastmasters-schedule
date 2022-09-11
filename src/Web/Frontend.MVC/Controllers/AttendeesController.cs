@@ -10,7 +10,7 @@ namespace Frontend.MVC.Controllers
 {
     [Route("meetings/{meetingId:int}/attendees")]
     [ApiController]
-    public class AttendeesController : Microsoft.AspNetCore.Mvc.Controller
+    public class AttendeesController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -23,7 +23,7 @@ namespace Frontend.MVC.Controllers
 
         // GET: Attendees/Edit/5
         [HttpGet("{attendeeId}")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int meetingId, int attendeeId)
+        public async Task<ActionResult> Edit(int meetingId, int attendeeId)
         {
             var client = new MeetingClient(_config);
             var attendee = await client.GetAttendee(meetingId, attendeeId);
@@ -61,7 +61,7 @@ namespace Frontend.MVC.Controllers
         // POST: Attendees/Edit/5
         [HttpPost("{attendeeId}")]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int meetingId, int attendeeId, [FromForm]AttendeeViewModel model)
+        public async Task<ActionResult> Edit(int meetingId, int attendeeId, [FromForm]AttendeeViewModel model)
         {
             var memberClient = new MemberClient(_config);
             var members = await memberClient.GetAll();
@@ -93,7 +93,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await client.UpdateAttendee(meetingId, attendee);
 
-                    if (200 == response.StatusCode)
+                    if (204 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"Le participant a été modifiée.");
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Frontend.MVC.Controllers
 {
     [Authorize]
-    public class MeetingsController : Microsoft.AspNetCore.Mvc.Controller
+    public class MeetingsController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -20,7 +20,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Meetings
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
+        public async Task<ActionResult> Index()
         {
             var client = new MeetingClient(_config);
 
@@ -44,7 +44,7 @@ namespace Frontend.MVC.Controllers
             return View(meeting);
         }
 
-        public Microsoft.AspNetCore.Mvc.ActionResult Create()
+        public ActionResult Create()
         {
             var meeting = new Meeting();
 
@@ -54,7 +54,7 @@ namespace Frontend.MVC.Controllers
         // POST: Meetings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Create([FromForm]Meeting model)
+        public async Task<ActionResult> Create([FromForm]Meeting model)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await client.Create(model);
 
-                    if (200 == response.StatusCode)
+                    if (201 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"La rencontre du {model.Date} a été ajoutée.");
 
@@ -81,7 +81,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Meetings/Edit/5
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             var client = new MeetingClient(_config);
 
@@ -98,7 +98,7 @@ namespace Frontend.MVC.Controllers
         // POST: Meetings/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Edit(int id, [FromForm]Meeting model)
+        public async Task<ActionResult> Edit(int id, [FromForm]Meeting model)
         {
             if (ModelState.IsValid)
             {
@@ -120,7 +120,7 @@ namespace Frontend.MVC.Controllers
 
                     var response = await client.Update(meeting);
 
-                    if (200 == response.StatusCode)
+                    if (204 == response.StatusCode)
                     {
                         _toastNotification.AddSuccessToastMessage($"La rencontre du {model.Date} a été modifiée.");
 
@@ -137,7 +137,7 @@ namespace Frontend.MVC.Controllers
         }
 
         // GET: Meetings/Delete/5
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var client = new MeetingClient(_config);
 
@@ -154,7 +154,7 @@ namespace Frontend.MVC.Controllers
         // POST: Meetings/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Delete(int id, [FromForm]Meeting model)
+        public async Task<ActionResult> Delete(int id, [FromForm]Meeting model)
         {
             try
             {
