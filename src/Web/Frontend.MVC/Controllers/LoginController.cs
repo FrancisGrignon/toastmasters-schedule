@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.MVC.Controllers
 {
-    public class LoginController : Microsoft.AspNetCore.Mvc.Controller
+    public class LoginController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IToastNotification _toastNotification;
@@ -34,7 +34,7 @@ namespace Frontend.MVC.Controllers
         // POST: Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index([FromForm]LoginViewModel model)
+        public async Task<ActionResult> Index([FromForm]LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -79,17 +79,27 @@ namespace Frontend.MVC.Controllers
                 // Setting  
                 claims.Add(new Claim(ClaimTypes.Name, username));
 
-                var claimIdenties = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimPrincipal = new ClaimsPrincipal(claimIdenties);
-                var authenticationManager = Request.HttpContext;
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                //    var claimPrincipal = new ClaimsPrincipal(claimsIdentity);
+                //       var authenticationManager = Request.HttpContext;
+
+                var authProperties = new AuthenticationProperties
+                {
+                    // Empty
+                };
 
                 // Sign In.  
-                await authenticationManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, new AuthenticationProperties() { IsPersistent = isPersistent });
+                //await authenticationManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, new AuthenticationProperties() { IsPersistent = isPersistent });
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
             }
             catch (Exception ex)
             {
                 // Info  
-                throw ex;
+                throw;
             }
         }
     }

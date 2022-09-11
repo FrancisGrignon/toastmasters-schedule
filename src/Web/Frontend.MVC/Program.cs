@@ -19,20 +19,16 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie(options =>
-{
-    options.LoginPath = new PathString("/Login");
-    options.AccessDeniedPath = new PathString("/Login");
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
-});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = new PathString("/Login");
+        options.AccessDeniedPath = new PathString("/Login");
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+    });
 
 builder.Services.AddMvc().AddNToastNotifyToastr();
-//builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -50,6 +46,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
