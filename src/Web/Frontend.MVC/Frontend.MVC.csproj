@@ -7,14 +7,14 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Flurl.Http" Version="3.2.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Cryptography.Internal" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.Internal" Version="6.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="6.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="NToastNotify" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
   </ItemGroup>
 </Project>
